@@ -1,0 +1,254 @@
+{
+ "meta": {
+  "creator": "cds-dk 8.6.1"
+ },
+ "$version": "2.0",
+ "definitions": {
+  "EmpCompensation": {
+   "kind": "service",
+   "@cds.external": true,
+   "@m.IsDefaultEntityContainer": "true"
+  },
+  "EmpCompensation.EmpCompensation": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.label": "Compensation Information",
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.upsertable": "true",
+   "@sap.deletable": "false",
+   "elements": {
+    "seqNumber": {
+     "key": true,
+     "type": "cds.Integer64",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Sequence Number",
+     "notNull": true
+    },
+    "startDate": {
+     "key": true,
+     "type": "cds.Date",
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.display.format": "Date",
+     "@sap.label": "Start Date",
+     "notNull": true
+    },
+    "userId": {
+     "key": true,
+     "type": "cds.String",
+     "length": 100,
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "User ID",
+     "notNull": true
+    },
+    "compensationStructure": {
+     "type": "cds.String",
+     "length": 128,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "Compensation Structure"
+    },
+    "createdBy": {
+     "type": "cds.String",
+     "length": 100,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Created By"
+    },
+    "createdDateTime": {
+     "type": "cds.DateTime",
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Created Date Time"
+    },
+    "createdOn": {
+     "type": "cds.Date",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.display.format": "Date",
+     "@sap.label": "Created On"
+    },
+    "customDouble1": {
+     "type": "cds.Double",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "Monthly Salary"
+    },
+    "customDouble2": {
+     "type": "cds.Double",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "Migration Delta"
+    },
+    "effectiveLatestChange": {
+     "type": "cds.Boolean",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "true",
+     "@sap.label": "effectiveLatestChange"
+    },
+    "endDate": {
+     "type": "cds.Date",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.display.format": "Date",
+     "@sap.label": "End Date"
+    },
+    "event": {
+     "type": "cds.String",
+     "length": 45,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.picklist": "event",
+     "@sap.label": "Event"
+    },
+    "eventReason": {
+     "type": "cds.LargeString",
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "Event Reason"
+    },
+    "lastModifiedBy": {
+     "type": "cds.String",
+     "length": 100,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Last Modified By"
+    },
+    "lastModifiedDateTime": {
+     "type": "cds.DateTime",
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Last Modified Date Time"
+    },
+    "lastModifiedOn": {
+     "type": "cds.Date",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.display.format": "Date",
+     "@sap.label": "Last Modified On"
+    },
+    "notes": {
+     "type": "cds.String",
+     "length": 4000,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "Comments"
+    },
+    "operation": {
+     "type": "cds.LargeString",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "false",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "operation"
+    },
+    "payGroup": {
+     "type": "cds.String",
+     "length": 32,
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Pay Group"
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,7 @@
+<mvc:View controllerName="qa.com.qelng.pcui5.paycomponentsui5.controller.App"
+    displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <App id="app">
+    </App>
+</mvc:View>

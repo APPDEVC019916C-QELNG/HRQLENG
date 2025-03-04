@@ -1,0 +1,199 @@
+{
+ "meta": {
+  "creator": "cds-dk 8.6.1"
+ },
+ "$version": "2.0",
+ "definitions": {
+  "cust_SchoolTranspAllowance_Eligibility": {
+   "kind": "service",
+   "@cds.external": true,
+   "@m.IsDefaultEntityContainer": "true"
+  },
+  "cust_SchoolTranspAllowance_Eligibility.cust_SchoolTranspAllowance_Eligibility": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.label": "School Transportation Allowance Rules (Eligibility)",
+   "@sap.creatable": "true",
+   "@sap.updatable": "true",
+   "@sap.upsertable": "true",
+   "@sap.deletable": "true",
+   "elements": {
+    "effectiveStartDate": {
+     "key": true,
+     "type": "cds.Date",
+     "@sap.required": "true",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.display.format": "Date",
+     "@sap.label": "Effective as of",
+     "notNull": true
+    },
+    "externalCode": {
+     "key": true,
+     "type": "cds.Integer64",
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Code",
+     "notNull": true
+    },
+    "createdBy": {
+     "type": "cds.String",
+     "length": 100,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Created By"
+    },
+    "createdDateTime": {
+     "type": "cds.DateTime",
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Created On"
+    },
+    "cust_ECField": {
+     "type": "cds.String",
+     "length": 128,
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.picklist": "QE_SAP_SchoolTransp_Fields",
+     "@sap.label": "EC Field (Criteria)"
+    },
+    "cust_EligibilityType": {
+     "type": "cds.String",
+     "length": 128,
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.picklist": "QE_SAP_SchoolTransp_Elig_Types",
+     "@sap.label": "Eligibility Type"
+    },
+    "cust_National": {
+     "type": "cds.String",
+     "length": 128,
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.picklist": "QG_SAP_National",
+     "@sap.label": "National"
+    },
+    "cust_Operator": {
+     "type": "cds.String",
+     "length": 5,
+     "@sap.required": "true",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Operator"
+    },
+    "cust_Values": {
+     "type": "cds.String",
+     "length": 64,
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Values"
+    },
+    "externalName": {
+     "type": "cds.String",
+     "length": 128,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Name"
+    },
+    "lastModifiedBy": {
+     "type": "cds.String",
+     "length": 100,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Last Modified By"
+    },
+    "lastModifiedDateTime": {
+     "type": "cds.DateTime",
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Last Modified Date"
+    },
+    "mdfSystemEffectiveEndDate": {
+     "type": "cds.Date",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.display.format": "Date",
+     "@sap.label": "Effective End Date"
+    },
+    "mdfSystemRecordStatus": {
+     "type": "cds.String",
+     "length": 255,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Record Status"
+    }
+   }
+  }
+ }
+}

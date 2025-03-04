@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:atom="http://www.w3.org/2005/Atom">
+    <edmx:DataServices m:DataServiceVersion="2.0" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+        <Schema Namespace="SFODataSet" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:sf="http://www.successfactors.com/edm/sf" xmlns:sap="http://www.successfactors.com/edm/sap">
+            <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+                <EntitySet Name="FOJobCode" EntityType="SFOData.FOJobCode" sap:label="Job Classification " sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:deletable="true">
+                    <Documentation>
+                        <Summary>FOJobCode</Summary>
+                        <LongDescription>This is a foundation object that contains job codes for all job types.</LongDescription>
+                        <sap:tagcollection>
+                            <sap:tag>Employee Central (EC)</sap:tag>
+                            <sap:tag>EC - Foundation/Organization</sap:tag>
+                        </sap:tagcollection>
+                    </Documentation>
+                </EntitySet>
+                <AssociationSet Name="parentJobClassificationNav_of_FOJobCode" Association="SFOData.parentJobClassificationNav_of_FOJobCode">
+                    <End EntitySet="FOJobCode" Role="FOJobCode"></End>
+                    <End EntitySet="FOJobCode" Role="parentJobClassificationNav"></End>
+                </AssociationSet>
+            </EntityContainer>
+        </Schema>
+        <Schema Namespace="SFOData" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:sf="http://www.successfactors.com/edm/sf" xmlns:sap="http://www.successfactors.com/edm/sap">
+            <EntityType Name="FOJobCode">
+                <Key>
+                    <PropertyRef Name="externalCode"></PropertyRef>
+                    <PropertyRef Name="startDate"></PropertyRef>
+                </Key>
+                <Property Name="createdBy" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="100" sap:label="createdBy"></Property>
+                <Property Name="createdDateTime" Type="Edm.DateTimeOffset" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="createdDate"></Property>
+                <Property Name="createdOn" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="createdDate"></Property>
+                <Property Name="cust_CompetDiff" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="1" sap:label="Competency Differentiator"></Property>
+                <Property Name="cust_JobChangeReason" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="4000" sap:label="Job Change Reason"></Property>
+                <Property Name="cust_JobLadder" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:picklist="QG_SAP_JobLadder" sap:label="Job Ladder"></Property>
+                <Property Name="cust_JobSubFamily" Type="Edm.String" Nullable="true" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Job SubFamily"></Property>
+                <Property Name="cust_JobTitle_Arabic" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="40" sap:label="Job Title (Arabic)"></Property>
+                <Property Name="cust_SeqNumber" Type="Edm.String" Nullable="true" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="6" sap:label="Sequence Number"></Property>
+                <Property Name="cust_ShortName" Type="Edm.String" Nullable="true" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="13" sap:label="Short Name"></Property>
+                <Property Name="cust_name_ar_SA" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="40" sap:label="Job Name"></Property>
+                <Property Name="cust_name_defaultValue" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="40" sap:label="Job Name"></Property>
+                <Property Name="cust_name_en_DEBUG" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="40" sap:label="Job Name"></Property>
+                <Property Name="cust_name_en_GB" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="40" sap:label="Job Name"></Property>
+                <Property Name="cust_name_en_US" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="40" sap:label="Job Name"></Property>
+                <Property Name="cust_name_localized" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="40" sap:label="Job Name"></Property>
+                <Property Name="defaultJobLevel" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:picklist="QG_SAP_JobLevel" sap:label="Job Level"></Property>
+                <Property Name="endDate" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="effectiveEndDate"></Property>
+                <Property Name="entityUUID" Type="Edm.String" Nullable="false" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="32" sap:label="entityUUID"></Property>
+                <Property Name="externalCode" Type="Edm.String" Nullable="false" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="8" sap:label="Job Code"></Property>
+                <Property Name="grade" Type="Edm.String" Nullable="true" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="32" sap:label="Job Grade"></Property>
+                <Property Name="jobFunction" Type="Edm.String" Nullable="true" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Job Family"></Property>
+                <Property Name="jobLevel" Type="Edm.String" Nullable="true" sap:required="true" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:picklist="QG_SAP_JobLevel" sap:label="Job Level"></Property>
+                <Property Name="lastModifiedBy" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="100" sap:label="lastModifiedBy"></Property>
+                <Property Name="lastModifiedDateTime" Type="Edm.DateTimeOffset" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="lastModifiedDate"></Property>
+                <Property Name="lastModifiedOn" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="lastModifiedDate"></Property>
+                <Property Name="mdfSystemRecordId" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="255" sap:label="Record ID"></Property>
+                <Property Name="name" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="55" sap:label="Job Title"></Property>
+                <Property Name="name_ar_SA" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="55" sap:label="Job Title"></Property>
+                <Property Name="name_defaultValue" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="55" sap:label="Job Title"></Property>
+                <Property Name="name_en_DEBUG" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="55" sap:label="Job Title"></Property>
+                <Property Name="name_en_GB" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="55" sap:label="Job Title"></Property>
+                <Property Name="name_en_US" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="55" sap:label="Job Title"></Property>
+                <Property Name="name_localized" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="55" sap:label="Job Title"></Property>
+                <Property Name="startDate" Type="Edm.DateTime" Nullable="false" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="Effective as of"></Property>
+                <Property Name="status" Type="Edm.String" Nullable="true" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Status"></Property>
+            </EntityType>
+            <Association Name="parentJobClassificationNav_of_FOJobCode">
+                <End Type="SFOData.FOJobCode" Multiplicity="*" Role="FOJobCode"></End>
+                <End Type="SFOData.FOJobCode" Multiplicity="0..1" Role="parentJobClassificationNav"></End>
+            </Association>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

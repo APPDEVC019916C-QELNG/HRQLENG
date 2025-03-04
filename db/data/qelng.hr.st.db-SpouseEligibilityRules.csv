@@ -1,0 +1,2 @@
+ID,name,target,custNat,custEligibility,ecField,paycomponent,targetEntityProp,checkGender
+69532770-9f64-4331-93b1-9d73cb66a5ac,spouseEmpGender,Spouse,Nat,spouse,empGender,3126,NA,true

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:atom="http://www.w3.org/2005/Atom">
+    <edmx:DataServices m:DataServiceVersion="2.0" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+        <Schema Namespace="SFODataSet" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:sf="http://www.successfactors.com/edm/sf" xmlns:sap="http://www.successfactors.com/edm/sap">
+            <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+                <EntitySet Name="FODepartment" EntityType="SFOData.FODepartment" sap:label="Organizational Unit" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:deletable="true">
+                    <Documentation>
+                        <Summary>FODepartment</Summary>
+                        <LongDescription>This is a foundation object that describes a department in an organization.</LongDescription>
+                        <sap:tagcollection>
+                            <sap:tag>Employee Central (EC)</sap:tag>
+                            <sap:tag>EC - Foundation/Organization</sap:tag>
+                            <sap:tag>Recommended</sap:tag>
+                        </sap:tagcollection>
+                    </Documentation>
+                </EntitySet>
+                <AssociationSet Name="parentDepartmentNav_of_FODepartment" Association="SFOData.parentDepartmentNav_of_FODepartment">
+                    <End EntitySet="FODepartment" Role="FODepartment"></End>
+                    <End EntitySet="FODepartment" Role="parentDepartmentNav"></End>
+                </AssociationSet>
+                <AssociationSet Name="cust_OrgStr_DepNav_of_FODepartment" Association="SFOData.cust_OrgStr_DepNav_of_FODepartment">
+                    <End EntitySet="FODepartment" Role="FODepartment"></End>
+                    <End EntitySet="FODepartment" Role="cust_OrgStr_DepNav"></End>
+                </AssociationSet>
+                <AssociationSet Name="cust_OrgStr_DivNav_of_FODepartment" Association="SFOData.cust_OrgStr_DivNav_of_FODepartment">
+                    <End EntitySet="FODepartment" Role="FODepartment"></End>
+                    <End EntitySet="FODepartment" Role="cust_OrgStr_DivNav"></End>
+                </AssociationSet>
+                <AssociationSet Name="cust_OrgStr_SectNav_of_FODepartment" Association="SFOData.cust_OrgStr_SectNav_of_FODepartment">
+                    <End EntitySet="FODepartment" Role="FODepartment"></End>
+                    <End EntitySet="FODepartment" Role="cust_OrgStr_SectNav"></End>
+                </AssociationSet>
+                <AssociationSet Name="cust_OrgStr_SubSecNav_of_FODepartment" Association="SFOData.cust_OrgStr_SubSecNav_of_FODepartment">
+                    <End EntitySet="FODepartment" Role="FODepartment"></End>
+                    <End EntitySet="FODepartment" Role="cust_OrgStr_SubSecNav"></End>
+                </AssociationSet>
+                <AssociationSet Name="cust_OrgStr_GroupNav_of_FODepartment" Association="SFOData.cust_OrgStr_GroupNav_of_FODepartment">
+                    <End EntitySet="FODepartment" Role="FODepartment"></End>
+                    <End EntitySet="FODepartment" Role="cust_OrgStr_GroupNav"></End>
+                </AssociationSet>
+            </EntityContainer>
+        </Schema>
+        <Schema Namespace="SFOData" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:sf="http://www.successfactors.com/edm/sf" xmlns:sap="http://www.successfactors.com/edm/sap">
+            <EntityType Name="FODepartment">
+                <Key>
+                    <PropertyRef Name="externalCode"></PropertyRef>
+                    <PropertyRef Name="startDate"></PropertyRef>
+                </Key>
+                <Property Name="costCenter" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Cost Center"></Property>
+                <Property Name="createdBy" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="100" sap:label="createdBy"></Property>
+                <Property Name="createdDateTime" Type="Edm.DateTimeOffset" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="createdDate"></Property>
+                <Property Name="createdOn" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="createdDate"></Property>
+                <Property Name="cust_FocalPoint" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="100" sap:label="Focal Point for Learning &amp; Development"></Property>
+                <Property Name="cust_OrgStr_Dep" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Department"></Property>
+                <Property Name="cust_OrgStr_Div" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Division"></Property>
+                <Property Name="cust_OrgStr_Group" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Group"></Property>
+                <Property Name="cust_OrgStr_Sect" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Section"></Property>
+                <Property Name="cust_OrgStr_SubSec" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="SubSection"></Property>
+                <Property Name="cust_OrgStr_WFAnalyst" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="100" sap:label="WorkForce Analyst"></Property>
+                <Property Name="cust_ShortName" Type="Edm.String" Nullable="true" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="17" sap:label="Org.Key"></Property>
+                <Property Name="cust_Type" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:picklist="QG_SAP_OrgType" sap:label="Organizational Unit Type"></Property>
+                <Property Name="cust_headOfUnit_Pos" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Head of Organizational Unit (Position)"></Property>
+                <Property Name="description" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Description"></Property>
+                <Property Name="description_ar_SA" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Description"></Property>
+                <Property Name="description_defaultValue" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Description"></Property>
+                <Property Name="description_en_DEBUG" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Description"></Property>
+                <Property Name="description_en_GB" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Description"></Property>
+                <Property Name="description_en_US" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Description"></Property>
+                <Property Name="description_localized" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="128" sap:label="Description"></Property>
+                <Property Name="endDate" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="effectiveEndDate"></Property>
+                <Property Name="entityUUID" Type="Edm.String" Nullable="false" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="32" sap:label="entityUUID"></Property>
+                <Property Name="externalCode" Type="Edm.String" Nullable="false" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="8" sap:label="Code"></Property>
+                <Property Name="headOfUnit" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="100" sap:label="Head of Organizational Unit"></Property>
+                <Property Name="lastModifiedBy" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="100" sap:label="lastModifiedBy"></Property>
+                <Property Name="lastModifiedDateTime" Type="Edm.DateTimeOffset" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="lastModifiedDate"></Property>
+                <Property Name="lastModifiedOn" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="lastModifiedDate"></Property>
+                <Property Name="mdfSystemRecordId" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="255" sap:label="Record ID"></Property>
+                <Property Name="name" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="40" sap:label="Name"></Property>
+                <Property Name="name_ar_SA" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="40" sap:label="Name"></Property>
+                <Property Name="name_defaultValue" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="40" sap:label="Name"></Property>
+                <Property Name="name_en_DEBUG" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="40" sap:label="Name"></Property>
+                <Property Name="name_en_GB" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="40" sap:label="Name"></Property>
+                <Property Name="name_en_US" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="40" sap:label="Name"></Property>
+                <Property Name="name_localized" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="40" sap:label="Name"></Property>
+                <Property Name="parent" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Parent Organizational Unit"></Property>
+                <Property Name="startDate" Type="Edm.DateTime" Nullable="false" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="Effective as of"></Property>
+                <Property Name="status" Type="Edm.String" Nullable="true" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Status"></Property>
+                <NavigationProperty Name="cust_OrgStr_DepNav" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" Relationship="SFOData.cust_OrgStr_DepNav_of_FODepartment" FromRole="FODepartment" ToRole="cust_OrgStr_DepNav" sap:field-control="FODepartmentFieldControlsNav/cust_OrgStr_DepNav" sap:label="Department"></NavigationProperty>
+                <NavigationProperty Name="cust_OrgStr_DivNav" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" Relationship="SFOData.cust_OrgStr_DivNav_of_FODepartment" FromRole="FODepartment" ToRole="cust_OrgStr_DivNav" sap:field-control="FODepartmentFieldControlsNav/cust_OrgStr_DivNav" sap:label="Division"></NavigationProperty>
+                <NavigationProperty Name="cust_OrgStr_GroupNav" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" Relationship="SFOData.cust_OrgStr_GroupNav_of_FODepartment" FromRole="FODepartment" ToRole="cust_OrgStr_GroupNav" sap:field-control="FODepartmentFieldControlsNav/cust_OrgStr_GroupNav" sap:label="Group"></NavigationProperty>
+                <NavigationProperty Name="cust_OrgStr_SectNav" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" Relationship="SFOData.cust_OrgStr_SectNav_of_FODepartment" FromRole="FODepartment" ToRole="cust_OrgStr_SectNav" sap:field-control="FODepartmentFieldControlsNav/cust_OrgStr_SectNav" sap:label="Section"></NavigationProperty>
+                <NavigationProperty Name="cust_OrgStr_SubSecNav" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" Relationship="SFOData.cust_OrgStr_SubSecNav_of_FODepartment" FromRole="FODepartment" ToRole="cust_OrgStr_SubSecNav" sap:field-control="FODepartmentFieldControlsNav/cust_OrgStr_SubSecNav" sap:label="SubSection"></NavigationProperty>
+                <NavigationProperty Name="parentNav" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" Relationship="SFOData.parentDepartmentNav_of_FODepartment" FromRole="FODepartment" ToRole="parentDepartmentNav" sap:field-control="FODepartmentFieldControlsNav/parentDepartmentNav" sap:label="Parent Organizational Unit"></NavigationProperty>
+            </EntityType>
+            <Association Name="parentDepartmentNav_of_FODepartment">
+                <End Type="SFOData.FODepartment" Multiplicity="*" Role="FODepartment"></End>
+                <End Type="SFOData.FODepartment" Multiplicity="0..1" Role="parentDepartmentNav"></End>
+            </Association>
+            <Association Name="cust_OrgStr_DepNav_of_FODepartment">
+                <End Type="SFOData.FODepartment" Multiplicity="*" Role="FODepartment"></End>
+                <End Type="SFOData.FODepartment" Multiplicity="0..1" Role="cust_OrgStr_DepNav"></End>
+            </Association>
+            <Association Name="cust_OrgStr_DivNav_of_FODepartment">
+                <End Type="SFOData.FODepartment" Multiplicity="*" Role="FODepartment"></End>
+                <End Type="SFOData.FODepartment" Multiplicity="0..1" Role="cust_OrgStr_DivNav"></End>
+            </Association>
+            <Association Name="cust_OrgStr_SectNav_of_FODepartment">
+                <End Type="SFOData.FODepartment" Multiplicity="*" Role="FODepartment"></End>
+                <End Type="SFOData.FODepartment" Multiplicity="0..1" Role="cust_OrgStr_SectNav"></End>
+            </Association>
+            <Association Name="cust_OrgStr_SubSecNav_of_FODepartment">
+                <End Type="SFOData.FODepartment" Multiplicity="*" Role="FODepartment"></End>
+                <End Type="SFOData.FODepartment" Multiplicity="0..1" Role="cust_OrgStr_SubSecNav"></End>
+            </Association>
+            <Association Name="cust_OrgStr_GroupNav_of_FODepartment">
+                <End Type="SFOData.FODepartment" Multiplicity="*" Role="FODepartment"></End>
+                <End Type="SFOData.FODepartment" Multiplicity="0..1" Role="cust_OrgStr_GroupNav"></End>
+            </Association>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

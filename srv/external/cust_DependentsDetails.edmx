@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:atom="http://www.w3.org/2005/Atom">
+    <edmx:DataServices m:DataServiceVersion="2.0" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+        <Schema Namespace="SFODataSet" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:sf="http://www.successfactors.com/edm/sf" xmlns:sap="http://www.successfactors.com/edm/sap">
+            <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+                <EntitySet Name="cust_DependentsDetails" EntityType="SFOData.cust_DependentsDetails" sap:label="Dependents Details" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:deletable="true">
+                    <Documentation>
+                        <Summary></Summary>
+                        <LongDescription></LongDescription>
+                        <sap:tagcollection>
+                            <sap:tag>Foundation/Platform (PLT)</sap:tag>
+                            <sap:tag>PLT - Generic Objects</sap:tag>
+                        </sap:tagcollection>
+                    </Documentation>
+                </EntitySet>
+            </EntityContainer>
+        </Schema>
+        <Schema Namespace="SFOData" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:sf="http://www.successfactors.com/edm/sf" xmlns:sap="http://www.successfactors.com/edm/sap">
+            <EntityType Name="cust_DependentsDetails">
+                <Key>
+                    <PropertyRef Name="cust_Dependents_effectiveStartDate"></PropertyRef>
+                    <PropertyRef Name="cust_Dependents_externalCode"></PropertyRef>
+                    <PropertyRef Name="cust_Dependents_mdfSystemTransactionSequence"></PropertyRef>
+                    <PropertyRef Name="externalCode"></PropertyRef>
+                </Key>
+                <Property Name="createdBy" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="100" sap:label="Created By"></Property>
+                <Property Name="createdDateTime" Type="Edm.DateTimeOffset" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="Created On"></Property>
+                <Property Name="cust_ChildNr" Type="Edm.Int64" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="Child Nr."></Property>
+                <Property Name="cust_ChildOverseas" Type="Edm.Boolean" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="Child is Overseas for Dep. Educ. Travel"></Property>
+                <Property Name="cust_Comment" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="4000" sap:label="Comment"></Property>
+                <Property Name="cust_CompanyProvTransp" Type="Edm.Boolean" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="Company Provided Transport"></Property>
+                <Property Name="cust_ConfirmationDate" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="Employee Last Confirmation Date"></Property>
+                <Property Name="cust_DateOfBirth" Type="Edm.DateTime" Nullable="true" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="Date of Birth"></Property>
+                <Property Name="cust_DemobDate" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="Demobilization Date"></Property>
+                <Property Name="cust_Dependents_effectiveStartDate" Type="Edm.DateTime" Nullable="false" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="Dependents_Effective Start Date"></Property>
+                <Property Name="cust_Dependents_externalCode" Type="Edm.String" Nullable="false" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="100" sap:label="Dependents_Employee"></Property>
+                <Property Name="cust_Dependents_mdfSystemTransactionSequence" Type="Edm.Int64" Nullable="false" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="Dependents_Transaction Sequence Number"></Property>
+                <Property Name="cust_DisabilitySpecN" Type="Edm.Boolean" Nullable="true" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="Disability/Special Needs"></Property>
+                <Property Name="cust_Employed" Type="Edm.Boolean" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="Employed"></Property>
+                <Property Name="cust_ExcludeAF" Type="Edm.Boolean" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="Exclude from AF Pmt"></Property>
+                <Property Name="cust_ExpiryDate" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="Expiry Date"></Property>
+                <Property Name="cust_FamilyMember" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:picklist="QG_FamilyMember" sap:label="Family Member"></Property>
+                <Property Name="cust_FirstEntryDate" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="First Entry Date"></Property>
+                <Property Name="cust_FirstName" Type="Edm.String" Nullable="true" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="40" sap:label="First Name"></Property>
+                <Property Name="cust_HCM_PmtExc" Type="Edm.Boolean" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="HMC Pmt Exception"></Property>
+                <Property Name="cust_InsideQatar" Type="Edm.Boolean" Nullable="true" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="Inside Qatar"></Property>
+                <Property Name="cust_InsideQatarConfirm" Type="Edm.Boolean" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="Confirm Inside Qatar Information"></Property>
+                <Property Name="cust_IssueDate" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="Issue Date"></Property>
+                <Property Name="cust_LastName" Type="Edm.String" Nullable="true" sap:required="true" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="40" sap:label="Last Name"></Property>
+                <Property Name="cust_Married" Type="Edm.Boolean" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="Married"></Property>
+                <Property Name="cust_NatEduAssCalc" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:picklist="nationality" sap:label="Nationality for Education Assistance Calculation"></Property>
+                <Property Name="cust_Nationality" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:picklist="nationality" sap:label="Nationality"></Property>
+                <Property Name="cust_PassportNr" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="15" sap:label="Passport Number"></Property>
+                <Property Name="cust_PlaceOfIssue" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:picklist="nationality" sap:label="Place of Issue"></Property>
+                <Property Name="cust_RPexpiryDate" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="Qatar ID Expiry Date"></Property>
+                <Property Name="cust_RPid" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="11" sap:label="Qatar ID"></Property>
+                <Property Name="cust_RPissueDate" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="Qatar ID Issue Date"></Property>
+                <Property Name="cust_SchoolGrade" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:picklist="QG_SchoolGrade" sap:label="School Grade"></Property>
+                <Property Name="cust_SchoolName" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="School Name"></Property>
+                <Property Name="cust_gender" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:picklist="Gender" sap:label="Gender"></Property>
+                <Property Name="externalCode" Type="Edm.Int64" Nullable="false" sap:required="false" sap:creatable="true" sap:updatable="true" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="externalCode"></Property>
+                <Property Name="externalName" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Name"></Property>
+                <Property Name="lastModifiedBy" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="100" sap:label="Last Modified By"></Property>
+                <Property Name="lastModifiedDateTime" Type="Edm.DateTimeOffset" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="Last Modified Date"></Property>
+                <Property Name="mdfSystemRecordStatus" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="255" sap:label="Record Status"></Property>
+            </EntityType>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/mvc/Controller"],e=>{"use strict";return e.extend("qa.com.qelng.pcui5.paycomponentsui5.controller.HealthCardForm",{onInit(){}})});
+//# sourceMappingURL=App.controller.js.map

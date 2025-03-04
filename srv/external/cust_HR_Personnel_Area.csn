@@ -1,0 +1,161 @@
+{
+ "meta": {
+  "creator": "cds-dk 8.3.0"
+ },
+ "$version": "2.0",
+ "definitions": {
+  "cust_HR_Personnel_Area": {
+   "kind": "service",
+   "@cds.external": true,
+   "@m.IsDefaultEntityContainer": "true"
+  },
+  "cust_HR_Personnel_Area.cust_HR_Personnel_Area": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.label": "HR Personnel Area",
+   "@sap.creatable": "true",
+   "@sap.updatable": "true",
+   "@sap.upsertable": "true",
+   "@sap.deletable": "true",
+   "elements": {
+    "effectiveStartDate": {
+     "key": true,
+     "type": "cds.Date",
+     "@sap.required": "true",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.display.format": "Date",
+     "@sap.label": "Effective as of",
+     "notNull": true
+    },
+    "externalCode": {
+     "key": true,
+     "type": "cds.String",
+     "length": 128,
+     "@sap.required": "true",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Code",
+     "notNull": true
+    },
+    "createdBy": {
+     "type": "cds.String",
+     "length": 100,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Created By"
+    },
+    "createdDateTime": {
+     "type": "cds.DateTime",
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Created On"
+    },
+    "cust_Location": {
+     "type": "cds.String",
+     "length": 32,
+     "@sap.required": "true",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Location"
+    },
+    "externalName": {
+     "type": "cds.String",
+     "length": 128,
+     "@sap.required": "true",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Name"
+    },
+    "lastModifiedBy": {
+     "type": "cds.String",
+     "length": 100,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Last Modified By"
+    },
+    "lastModifiedDateTime": {
+     "type": "cds.DateTime",
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Last Modified Date"
+    },
+    "mdfSystemEffectiveEndDate": {
+     "type": "cds.Date",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.display.format": "Date",
+     "@sap.label": "Effective End Date"
+    },
+    "mdfSystemRecordStatus": {
+     "type": "cds.String",
+     "length": 255,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Record Status"
+    },
+    "mdfSystemStatus": {
+     "type": "cds.String",
+     "length": 255,
+     "@sap.required": "true",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "Status"
+    }
+   }
+  }
+ }
+}

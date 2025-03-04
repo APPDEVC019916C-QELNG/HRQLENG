@@ -1,0 +1,158 @@
+{
+ "meta": {
+  "creator": "cds-dk 8.4.1"
+ },
+ "$version": "2.0",
+ "definitions": {
+  "PicklistOption": {
+   "kind": "service",
+   "@cds.external": true,
+   "@m.IsDefaultEntityContainer": "true"
+  },
+  "PicklistOption.PicklistOption": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.label": "PicklistOption",
+   "@sap.creatable": "true",
+   "@sap.updatable": "true",
+   "@sap.upsertable": "false",
+   "@sap.deletable": "false",
+   "elements": {
+    "id": {
+     "key": true,
+     "type": "cds.Integer64",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "id",
+     "notNull": true
+    },
+    "externalCode": {
+     "type": "cds.String",
+     "length": 256,
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "true",
+     "@sap.label": "externalCode"
+    },
+    "localeLabel": {
+     "type": "cds.LargeString",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "localeLabel"
+    },
+    "maxValue": {
+     "type": "cds.Double",
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "maxValue"
+    },
+    "mdfExternalCode": {
+     "type": "cds.String",
+     "length": 256,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "true",
+     "@sap.label": "mdfExternalCode"
+    },
+    "minValue": {
+     "type": "cds.Double",
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "minValue"
+    },
+    "optionValue": {
+     "type": "cds.Double",
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "optionValue"
+    },
+    "sortOrder": {
+     "type": "cds.Integer",
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "sortOrder"
+    },
+    "status": {
+     "type": "cds.String",
+     "length": 9,
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "status"
+    },
+    "childPicklistOptions": {
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "childPicklistOptions",
+     "type": "cds.Association",
+     "target": "PicklistOption.PicklistOption",
+     "cardinality": {
+      "max": "*"
+     },
+     "keys": []
+    },
+    "parentPicklistOption": {
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "parentPicklistOption",
+     "type": "cds.Association",
+     "target": "PicklistOption.PicklistOption",
+     "keys": []
+    }
+   }
+  }
+ }
+}

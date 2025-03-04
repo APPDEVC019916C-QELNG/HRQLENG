@@ -1,0 +1,143 @@
+{
+  "name": "QELNG_HR-srv",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap-cloud-sdk/connectivity": "^3.26.0",
+    "@sap-cloud-sdk/http-client": "^3.26.0",
+    "@sap-cloud-sdk/resilience": "^3.25.0",
+    "@sap/cds": "^8",
+    "@sap/xssec": "^4",
+    "bottleneck": "^2.19.5",
+    "events": "^3.3.0",
+    "express": "^4",
+    "lodash": "^4.17.21",
+    "passport": "^0.7.0",
+    "rimraf": "^6.0.1",
+    "sap-cf-axios": "^1.0.2"
+  },
+  "devDependencies": {
+    "@cap-js/cds-types": "^0.8.0",
+    "@cap-js/sqlite": "^1",
+    "@sap/cds-dk": "^8",
+    "sqlite3": "^5.1.7"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "undeploy": "cf undeploy QELNG_HR --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "watch-fiori": "cds watch --open fiori/webapp/index.html?sap-ui-xx-viewCache=false"
+  },
+  "cds": {
+    "query": {
+      "limit": {
+        "max": 5000
+      }
+    },
+    "requires": {
+      "auth": "mocked",
+      "connectivity": true,
+      "destinations": true,
+      "FODepartment": {
+        "kind": "odata-v2",
+        "model": "srv/external/FODepartment",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      },
+      "FOJobCode": {
+        "kind": "odata-v2",
+        "model": "srv/external/FOJobCode",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      },
+      "cust_HR_Personnel_Area": {
+        "kind": "odata-v2",
+        "model": "srv/external/cust_HR_Personnel_Area",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      },
+      "cust_Employee_Group": {
+        "kind": "odata-v2",
+        "model": "srv/external/cust_Employee_Group",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      },
+      "EmpJob": {
+        "kind": "odata-v2",
+        "model": "srv/external/EmpJob",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      },
+      "cust_SchoolTranspAllowance_Rules": {
+        "kind": "odata-v2",
+        "model": "srv/external/cust_SchoolTranspAllowance_Rules",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      },
+      "cust_SchoolTranspAllowance_Eligibility": {
+        "kind": "odata-v2",
+        "model": "srv/external/cust_SchoolTranspAllowance_Eligibility",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      },
+      "PicklistOption": {
+        "kind": "odata-v2",
+        "model": "srv/external/PicklistOption",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      },
+      "cust_Dependents": {
+        "kind": "odata-v2",
+        "model": "srv/external/cust_Dependents",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      },
+      "cust_DependentsDetails": {
+        "kind": "odata-v2",
+        "model": "srv/external/cust_DependentsDetails",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      },
+      "EmpPayCompRecurring": {
+        "kind": "odata-v2",
+        "model": "srv/external/EmpPayCompRecurring",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      },
+      "EmpCompensation": {
+        "kind": "odata-v2",
+        "model": "srv/external/EmpCompensation",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      }
+    }
+  }
+}

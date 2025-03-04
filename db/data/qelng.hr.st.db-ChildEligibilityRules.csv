@@ -1,0 +1,11 @@
+ID,name,target,custNat,custEligibility,ecField,paycomponent,targetEntityProp,withPickList,withEmpEmployment,isDate,applicableAgeRange,gender
+69532070-9f64-4331-93b1-9d73cb66a5ac,childInsideQatar,Child,Nat,childBE23,insideQatar,3126,cust_InsideQatar,false,false,false,<=23,NA
+69532070-9f64-4331-93b1-9d73cb66a5ad,schoolNameEligibility,Child,NonNat,child19_23,school,3125,cust_SchoolName,true,false,false,19-23,NA
+69532070-9f64-4331-93b1-9d73cb66a5ae,qatarIdEligibility,Child,NonNat,child19_23,qid,3125,cust_RPid,true,false,false,19-23,NA
+69532070-9f64-4331-93b1-9d73cb66a5af,qatarIdExpiryEligibility,Child,NonNat,child19_23,qid_expiry date,3125,cust_RPexpiryDate,true,false,true,19-23,NA
+69532070-9f64-4331-93b1-9d73cb66a6ab,insideQatarEligibility,Child,NonNat,child19_23,insideQatar,3125,cust_InsideQatar,false,false,false,19-23,NA
+62532070-9f64-4331-93b1-9d73cb66a6ac,employedChildEligibility,Child,Nat,childM23,employed,3126,cust_Employed,false,false,false,>23,M
+69532770-9f64-4331-93b1-9d73cb66a6ad,marriedEligibility,Child,Nat,childF23,married,3126,cust_Married,false,false,false,>23,F
+69532370-9f64-4331-93b1-9d73cb66a6ad,employeEligibility,Child,Nat,childF23,employed,3126,cust_Employed,false,false,false,>23,F
+69532072-9f64-4331-93b1-9d75cb66a6ad,marriedEligibility,Child,NonNat,child19_23,married,3125,cust_Married,false,false,false,19-23,NA
+69532071-9f64-4331-93b1-9d76cb66a6ad,employeEligibility,Child,NonNat,child19_23,employed,3125,cust_Employed,false,false,false,19-23,NA

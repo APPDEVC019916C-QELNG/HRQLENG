@@ -1,0 +1,154 @@
+{
+  "_version": "1.65.0",
+  "sap.cloud": {
+    "public": true,
+    "service": "qelngpc.ui5"
+  },
+  "sap.app": {
+    "id": "qa.com.qelng.pcui5.paycomponentsui5",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.6"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.15.5",
+      "toolsId": "edaa8daf-711e-43ba-a6d0-24e7548ee36d"
+    },
+    "dataSources": {
+      "proxyService": {
+        "uri": "/odata/v4/proxy_service/",
+        "type": "OData",
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      },
+      "ExecutionLogService": {
+        "uri": "/odata/v4/qa.com.qelng.pc.srv.ExecutionLogService/",
+        "type": "OData",
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.130.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "qa.com.qelng.pcui5.paycomponentsui5.i18n.i18n"
+        }
+      },
+      "pcModel": {
+        "dataSource": "proxyService",
+        "preload": true,
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "ExecutionLogServiceModel": {
+        "dataSource": "ExecutionLogService",
+        "preload": true,
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "qa.com.qelng.pcui5.paycomponentsui5.view"
+      },
+      "routes": [
+        {
+          "name": "RouteHealthCardForm",
+          "pattern": ":?query:",
+          "target": [
+            "TargetHealthCardForm"
+          ]
+        },
+        {
+          "name": "RouteExecutionLogs",
+          "pattern": "executionlogs",
+          "target": [
+            "TargetExecutionLogs"
+          ]
+        }
+      ],
+      "targets": {
+        "TargetHealthCardForm": {
+          "id": "HealthCardForm",
+          "name": "HealthCardForm"
+        },
+        "TargetExecutionLogs": {
+          "id": "ExecutionLogs",
+          "name": "ExecutionLogs"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "qa.com.qelng.pcui5.paycomponentsui5.view.App",
+      "type": "XML",
+      "id": "App"
+    }
+  }
+}
