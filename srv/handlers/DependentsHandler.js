@@ -1,85 +1,96 @@
 const constant = require('../util/Constants');
 const queryBuilder = require('../util/QueryBuilder');
-const dependentsEligibilityRules = require('../rules/DependentsEligibilityRules');
-const amountCalculator = require('../handlers/AmountCalculatorHandler');
 const payComponentRules = require('../rules/PayComponentRules');
 const sf_ec_integration = require('../integration/SF_EC_Integration');
 const httpClient = require('../integration/HttpClient');
+const childrenPayment = require('../payment/ChildrenPayment');
+const spousePayment = require('../payment/SpousePayment');
+
+const AmountCalculatorHandler = require('./AmountCalculatorHandler');
+
 
 class DependentsHandler {
-    constructor(service, st_picklist, bottleneck, executionLogHandler) {
+    constructor(service, st_picklist, bottleneck, executionLogHandler,  st_perPerson, st_healthCardRules, st_EmpEmployment) {
         this.service = service;
         this.queryBuilder = new queryBuilder();
 
-        this.dependentsEligibilityRules = new dependentsEligibilityRules(service, st_picklist, bottleneck);
-        this.amountCalculator = new amountCalculator();
         this.payComponentRules = new payComponentRules();
         this.executionLogHandler = executionLogHandler;
         this.sf_ec_integration = new sf_ec_integration();
 
         this.httpClient = new httpClient();
 
+        this.childrenPayment = new childrenPayment(service, bottleneck);
+        this.spousePayment = new spousePayment(service, bottleneck, st_perPerson, bottleneck);
+
+    
         this.limiter = bottleneck;
+        this.amountCalculatorHandler = new AmountCalculatorHandler(service, st_perPerson, st_picklist, st_healthCardRules, st_EmpEmployment);
     }
 
-    processEmployeeDependentsAllowance = async (aEligibleEmployeeList, sReferenceDate, sExecutionID, bSimulationMode) => {
-        let aPromise = [];
-        this.aErrorMessages = [];
+    getDependentsList = async (externalCode, sReferenceDate) => {
+        const sQuery = this.queryBuilder.buildEmployeeDependentsQuery(externalCode);
+        const oDependent = await this.httpClient.getCustDependent(sQuery, sReferenceDate, "cust_DependentsDetails");
 
-        aEligibleEmployeeList.forEach((employee) => {
-            aPromise.push(new Promise(async resolve => {
-                await this.getDependentsList(employee, sReferenceDate).then(async aDependents => {
-                    if (aDependents && aDependents.length) {
-                        let aEligibleDependents = await this.dependentsEligibilityRules.checkDependentsEligibility(employee, sReferenceDate, aDependents);
-                        if (aEligibleDependents && aEligibleDependents.length) {
-                            const iAmount = await this.amountCalculator.calculateAmount(aEligibleDependents, sReferenceDate);
-                            const aPayComponents = await this.payComponentRules._getEmployeePayComponents(employee, sReferenceDate, false);
-                            const oResult = await this.sf_ec_integration.runSfEcUpdate(employee, iAmount, sReferenceDate, aPayComponents, bSimulationMode);
+        if (!oDependent || oDependent.length === 0) {
+            // Log error or handle missing dependents
+            console.warn(`No dependents found for Employee ${externalCode} on ${sReferenceDate}`);
+            return null;
+        }
 
-                            await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, oResult.message ? [{ message: oResult.message }] : null, true, iAmount, oResult.bToUpdate, oResult.sDetails);
+        const dependentsList = oDependent[0]?.cust_DependentsDetails?.results || [];
 
-                            resolve({
-                                aEligibleDependents: aEligibleDependents,
-                                iAmount: iAmount,
-                                bValidPayComponent: oResult.bValid
-                            })
-                        } else {
-                            if (bSimulationMode) {
-                                await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, [{ message: `No Dependents are eligible for Employee ${employee.userId}, date ${sReferenceDate}` }], true);
-                            } else {
-                                const oResult = await this.payComponentRules.checkEmployeePayComponents(employee, sReferenceDate);
-                                await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, [...[{ message: `No Dependents are eligible for Employee ${employee.userId}, date ${sReferenceDate}` }], ...oResult.message ? [{ message: oResult.message }] : []], true, null, oResult.bToUpdate, oResult.sDetails);
-                            }
-                            resolve({ aEligibleDependents: null })
-                        }
-                    } else {
-                        await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, this.aErrorMessages.filter(msg => msg.userId == employee.userId), true);
-                        resolve({ aEligibleDependents: null })
-                    }
-                });
-            }));
-        });
+        if (dependentsList.length === 0) {
+            console.warn(`No Dependent Details found for Employee Dependent ${oDependent[0].externalCode}, date ${oDependent[0].effectiveStartDate}`);
+            return null;
+        }
 
-        return await Promise.all(aPromise).then(aResults => { return aResults.filter(res => !!res.aEligibleDependents) });
+        return dependentsList;
+
+    };
+
+    processWinner = async () => {
+
     }
 
-    getDependentsList = (oEmployee, sReferenceDate) => {
-        return new Promise(async resolve => {
-            const sQuery = this.queryBuilder.buildEmployeeDependentsQuery(oEmployee.userId);
-            const oDependent = await this.httpClient.getCustDependent(sQuery, sReferenceDate, "cust_DependentsDetails");
-            if (oDependent && oDependent.length > 0) {
-                if (oDependent[0].cust_DependentsDetails.results.length > 0) {
-                    resolve(oDependent[0].cust_DependentsDetails.results.filter(dependent => { return dependent.cust_FamilyMember == constant.MDF_VALUES.FAMILIY_KEY.CHILDREN }));
-                } else {
-                    this.aErrorMessages.push({ userId: oDependent[0].externalCode, message: `No Dependent Details found for Employee Dependent ${oDependent[0].externalCode}, date ${oDependent[0].effectiveStartDate}` });
-                    resolve(null);
-                }
-            } else {
-                this.aErrorMessages.push({ userId: oEmployee.userId, message: `No Dependent found for Employee ${oEmployee.userId}, date ${sReferenceDate}` });
-                resolve(null);
+
+
+
+
+
+    processChildDependent = async (employee, children, referenceDate, custNat) => {
+        let totalAmount = 0;
+    
+        for (const child of children) {
+            if (await this.childrenPayment.isApplicable(child, referenceDate, custNat)) {
+                let amount = await this.amountCalculatorHandler.calculateEmployeeChildPayment(employee, child, referenceDate, custNat, child);
+                totalAmount += parseFloat(amount) || 0; // Ensures numeric addition
             }
-        });
-    }
+        }
+    
+        return totalAmount.toString(); // Return as string if needed
+    };
+    
+
+    processSpouseDependent = async (employee, spouses, referenceDate, custNat) => {
+
+        let totalAmount = 0;
+    
+        for (const spouse of spouses) {
+            if (await this.spousePayment.isApplicable(spouse, referenceDate, custNat)) {
+                let amount = await this.amountCalculatorHandler.calculateEmployeeChildPayment(employee, spouse, referenceDate, custNat, spouse);
+                totalAmount += parseFloat(amount) || 0; // Ensures numeric addition
+            }
+        }
+    
+        return totalAmount.toString(); // Return as string if needed
+
+
+    };
+
+
+    
+    
 }
 
 module.exports = DependentsHandler;

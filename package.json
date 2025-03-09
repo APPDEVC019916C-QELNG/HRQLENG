@@ -1,5 +1,5 @@
 {
-  "name": "QELNG_HR-srv",
+  "name": "QELNG_HR",
   "version": "1.0.0",
   "description": "A simple CAP project.",
   "repository": "<Add your repository here>",
@@ -17,7 +17,8 @@
     "lodash": "^4.17.21",
     "passport": "^0.7.0",
     "rimraf": "^6.0.1",
-    "sap-cf-axios": "^1.0.2"
+    "sap-cf-axios": "^1.0.2",
+    "@sap/hana-client": "^2.18.27"
   },
   "devDependencies": {
     "@cap-js/cds-types": "^0.8.0",
@@ -42,6 +43,19 @@
       "auth": "mocked",
       "connectivity": true,
       "destinations": true,
+      "[development]": {
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "url": "db.sqlite"
+          }
+        }
+      },
+      "[production]": {
+        "db": {
+          "kind": "hana-cloud"
+        }
+      },
       "FODepartment": {
         "kind": "odata-v2",
         "model": "srv/external/FODepartment",
@@ -90,14 +104,6 @@
           "timeout": 90000
         }
       },
-      "cust_SchoolTranspAllowance_Eligibility": {
-        "kind": "odata-v2",
-        "model": "srv/external/cust_SchoolTranspAllowance_Eligibility",
-        "credentials": {
-          "destination": "cpapp-bupa",
-          "timeout": 90000
-        }
-      },
       "PicklistOption": {
         "kind": "odata-v2",
         "model": "srv/external/PicklistOption",
@@ -122,17 +128,49 @@
           "timeout": 90000
         }
       },
-      "EmpPayCompRecurring": {
+      "EmpCompensation": {
         "kind": "odata-v2",
-        "model": "srv/external/EmpPayCompRecurring",
+        "model": "srv/external/EmpCompensation",
         "credentials": {
           "destination": "cpapp-bupa",
           "timeout": 90000
         }
       },
-      "EmpCompensation": {
+      "cust_HealthCard_Rules_Eligibility": {
         "kind": "odata-v2",
-        "model": "srv/external/EmpCompensation",
+        "model": "srv/external/cust_HealthCard_Rules_Eligibility",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      },
+      "EmpPayCompNonRecurring": {
+        "kind": "odata-v2",
+        "model": "srv/external/EmpPayCompNonRecurring",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      },
+      "cust_HealthCard_Rules": {
+        "kind": "odata-v2",
+        "model": "srv/external/cust_HealthCard_Rules",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      },
+      "PerPersonal": {
+        "kind": "odata-v2",
+        "model": "srv/external/PerPersonal",
+        "credentials": {
+          "destination": "cpapp-bupa",
+          "timeout": 90000
+        }
+      },
+      "EmpEmployment": {
+        "kind": "odata-v2",
+        "model": "srv/external/EmpEmployment",
         "credentials": {
           "destination": "cpapp-bupa",
           "timeout": 90000

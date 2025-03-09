@@ -2,19 +2,25 @@ module.exports = Object.freeze({
 
     CDS_NAME:{
         EMPLOYEE_ELIGIBILITY_RULE:"EmployeeEligibilityRule",
-        CUST_SCHOOL_TRANSP_ALLOWANCE_ELIGIBILITY:"cust_SchoolTranspAllowance_Eligibility",
+        CHILD_ELIGIBILITY_RULE:"ChildEligibilityRules",
+        SPOUSE_ELIGIBILITY_RULE:"SpouseEligibilityRules",
+        CUST_HEALTHCARD_RULES_ELIGIBILITY:"cust_HealthCard_Rules_Eligibility ",
         PICK_LIST_OPTION: "PicklistOption",
         CUST_DEPENDENTS: "cust_Dependents",
         CUST_DEPENDENTS_DETAILS: "cust_DependentsDetails",
         CUST_SCHOOL_TRANSP_ALLOWANCE_RULES: "cust_SchoolTranspAllowance_Rules",
         EMP_PAY_COMP_RECURRING: "EmpPayCompRecurring",
+        EMP_PAY_COMP_NON_RECURRING: "EmpPayCompNonRecurring",
         EXECUTION_LOG: "ExecutionLog",
         FO_DEPARTMENT: "FODepartment",
         FO_JOB: "FOJobCode",
         HR_PERSONAL_AREA: "cust_HR_Personnel_Area",
         EMPLOYEE_GROUP: "cust_Employee_Group",
         EMP_COMPENSATION: "EmpCompensation",
-        EMP_JOB: "EmpJob"
+        EMP_JOB: "EmpJob",
+        CUST_HEALTHCARD_RULES:"cust_HealthCard_Rules",
+        PER_PERSONAL: "PerPersonal",
+        EMP_EMPLOYMENT : "EmpEmployment"
     },
 
     CDS_PROPERTY: {
@@ -26,6 +32,7 @@ module.exports = Object.freeze({
         SYSTEM_RECORD_STATUS: "N",
         SYSTEM_RECORD_STATUS_ACTIVE: "A",
         FAMILIY_KEY: {
+            SPOUSE: "1",
             CHILDREN: "2"
         },
         NAT: "Nat",

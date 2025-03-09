@@ -28,14 +28,22 @@ class QueryBuilder {
         }, {
             "mdfSystemRecordStatus": sSystemStatus
         }, {
-            "cust_National": sCustNat ?? null
-        }];
+            "cust_National": sCustNat
+        },
+
+    ];
 
         return this._buildQuery(aFilters);
     }
 
     buildEmployeeDependentsQuery = (sExternalCode) => {
         return `externalCode eq '${sExternalCode}'`;
+    }
+
+    buildEmployeeDependentsDetailsQuery = (sExternalCode, familyCode) => {
+      //  return 'externalCode eq '${sExternalCode} ' and cust_FamilyMember';
+        return `externalCode eq '${sExternalCode}' and cust_FamilyMember eq '${familyCode}'`;
+
     }
 
     buildCDSdependentQuery = (sTarget, sCustNat) => {

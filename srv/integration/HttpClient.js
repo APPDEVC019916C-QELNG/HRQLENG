@@ -12,6 +12,7 @@ class HttpClient {
         return await this._doUpsert(constant.CDS_NAME.EMP_COMPENSATION, oPayload);
     }
 
+    //MIGUEL
     upsertEmpPayCompRecurring = async (oPayload) => {
         return await this._doUpsert(constant.CDS_NAME.EMP_PAY_COMP_RECURRING, oPayload);
     }
@@ -51,6 +52,7 @@ class HttpClient {
         return await this._doGet(constant.CDS_NAME.EMP_JOB, sQuery, sReferenceDate, true, true, "userId");
     }
 
+    //MIGUEl
     getEmpPayCompRecurring = async (sQuery, sReferenceDate, bToDate) => {
         return await this._doGet(constant.CDS_NAME.EMP_PAY_COMP_RECURRING, sQuery, sReferenceDate, true, bToDate);
     }
@@ -60,12 +62,18 @@ class HttpClient {
     }
 
     getCustEligibility = async (sQuery, sReferenceDate) => {
-        return await this._doGet(constant.CDS_NAME.CUST_SCHOOL_TRANSP_ALLOWANCE_ELIGIBILITY, sQuery, sReferenceDate, true, true);
+        return await this._doGet(constant.CDS_NAME.CUST_HEALTHCARD_RULES_ELIGIBILITY, sQuery, sReferenceDate, true, true);
     }
-
+    
     getCustDependent = async (sQuery, sReferenceDate, sExpand) => {
         return await this._doGet(constant.CDS_NAME.CUST_DEPENDENTS, sQuery, sReferenceDate, true, true, null, sExpand);
     }
+
+    getCustDependentDetails = async (sQuery, sReferenceDate, sExpand) => {
+        return await this._doGet(constant.CDS_NAME.CUST_DEPENDENTS_DETAILS, sQuery, sReferenceDate, true, true, null, sExpand);
+    }
+
+
 
     getAllowanceRules = async (sQuery, sReferenceDate) => {
         return await this._doGet(constant.CDS_NAME.CUST_SCHOOL_TRANSP_ALLOWANCE_RULES, sQuery, sReferenceDate, true, true);

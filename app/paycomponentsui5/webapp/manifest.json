@@ -21,7 +21,7 @@
     },
     "dataSources": {
       "proxyService": {
-        "uri": "/odata/v4/proxy_service/",
+        "uri": "/odata/v4/pc-hrsrv/",
         "type": "OData",
         "settings": {
           "synchronizationMode": "None",

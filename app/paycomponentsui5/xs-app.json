@@ -33,8 +33,7 @@
       "target": "/odata/v4/$1",
       "authenticationType": "xsuaa",
       "csrfProtection": true,
-      "destination": "qelng-srv",
-      "scope" : ["XSAPPNAME.User"]
+      "destination": "qelng-srv"
     }
   ]
 }

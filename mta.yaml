@@ -16,12 +16,11 @@ modules:
   - name: QELNG_HR-srv
   # ------------------------------------------------------------
     type: nodejs
-    path: srv
+    path: gen/srv
     parameters:
-      instances: 1
       buildpack: nodejs_buildpack
     build-parameters:
-      builder: npm-ci
+      builder: npm
     provides:
       - name: srv-api # required by consumers of CAP services (e.g. approuter)
         properties:
@@ -30,28 +29,16 @@ modules:
       - name: QELNG_HR-auth
       - name: QELNG_HR-db
       - name: QELNG_HR-connectivity
-      - name: QELNG_HR-destination
+      - name: QELNG_HR-destination-service
 
   - name: QELNG_HR-db-deployer
     type: hdb
-    path: db
+    path: gen/db
     parameters:
-      buildpack: nodejs_buildpack
+      buildpack: nodejs_buildpack 
     requires:
       - name: QELNG_HR-db
-  
-  # -------------------- SIDECAR MODULE ------------------------
-  - name: QELNG_HR-app-deployer
-  # ------------------------------------------------------------
-    type: com.sap.application.content
-    path: .
-    requires:
-      - name: QELNG_HR-html5-repo-host
-        parameters:
-          content-target: true
-    build-parameters:
-      build-result: app/
-      requires:
+      - name: QELNG_HR-auth
 
   # ------------------ APPLICATION CONTENT ---------------------
   - name: QELNG_HR-appcontent
@@ -65,13 +52,13 @@ modules:
     build-parameters:
       build-result: resources/
       requires:
-        - name: payhrcomponentsui5
+        - name: pcHRui5
           artifacts:
-            - payhrcomponentsui5.zip
+            - pcHRui5.zip
           target-path: resources/  
 
   # ------------- APPLICATION:  HR components ----------------
-  - name: payhrcomponentsui5
+  - name: pcHRui5
     # ------------------------------------------------------------
     type: html5
     path: app/paycomponentsui5
@@ -83,6 +70,39 @@ modules:
         - npm run build:cf
       supported-platforms:
         []
+
+  # ------------------ DESTINATION CONTENT ---------------------
+  - name: QELNG_HR-destinationcontent
+  # ------------------------------------------------------------
+    type: com.sap.application.content
+    build-parameters:
+      no-source: true
+    requires:
+      - name: QELNG_HR-auth
+        parameters:
+          service-key:
+            name: QELNG_HR-auth-uaa-key
+      - name: QELNG_HR-html5-repo-host
+        parameters:
+          service-key:
+            name: QELNG_HR-html5-repo-host-key
+      - name: QELNG_HR-destination-service
+        parameters:
+          content-target: true
+    parameters:
+      content:
+        instance:
+          existing_destinations_policy: update
+          destinations:
+            - Name: QELNG_HR-html5-repository
+              ServiceInstanceName: QELNG_HR-html5-repo-host
+              ServiceKeyName: QELNG_HR-html5-repo-host-key
+              sap.cloud.service: qelngpc.ui5
+            - Name: QELNG_HR-auth
+              Authentication: OAuth2UserTokenExchange
+              ServiceInstanceName: QELNG_HR-auth
+              ServiceKeyName: QELNG_HR-auth-key
+              sap.cloud.service: qelngpc.ui5
 
 resources:
   - name: QELNG_HR-auth
@@ -104,13 +124,32 @@ resources:
     parameters:
       service: connectivity
       service-plan: lite
-  - name: QELNG_HR-destination
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: destination
-      service-plan: lite
+
   - name: QELNG_HR-html5-repo-host
     type: org.cloudfoundry.managed-service
     parameters:
       service: html5-apps-repo
       service-plan: app-host
+  # ------------------------------------------------------------
+  - name: QELNG_HR-destination-service
+  # ------------------------------------------------------------
+    type: org.cloudfoundry.managed-service
+    requires:
+      - name: srv-api
+    parameters:
+      service: destination
+      service-plan: lite
+      config:
+        version: 1.0.0
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            existing_destinations_policy: update
+            destinations:
+              - Name: qelng-srv
+                URL: ~{srv-api/srv-url}
+                Authentication: NoAuthentication
+                Type: HTTP
+                ProxyType: Internet
+                HTML5.ForwardAuthToken: true
+                HTML5.DynamicDestination: true

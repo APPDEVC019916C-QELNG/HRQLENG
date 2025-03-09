@@ -48,6 +48,7 @@ class PayComponentRules {
 
     }
 
+    //MIGUEL
     _getEmployeePayComponents = (oEmployee, sReferenceDate, bToDate) => {
         return new Promise(async resolve => {
             const sQuery = this.queryBuilder.buildEmployeeRecurringPayCompQuery(oEmployee.userId, constant.MDF_VALUES.PAY_COMPONENT);

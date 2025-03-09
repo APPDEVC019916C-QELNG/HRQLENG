@@ -21,11 +21,14 @@ class EligibilityRules {
         this.limiter = bottleneck;
     }
 
-    getEligibleEmployeeList = async (aFilteredEmployeeList, sReferenceDate, sExecutionID, bSimulationMode) => {
+    getEligibleEmployeeList = async (aFilteredEmployeeList, sReferenceDate, sExecutionID, sPayCompCode, bSimulationMode) => {
         let aPromise = [];
         this.aErrorMessages = [];
 
-        const aCdsRules = await this.cruder.read(constant.CDS_NAME.EMPLOYEE_ELIGIBILITY_RULE).where({ "target": constant.CDS_PROPERTY.EMPLOYEE });
+        //const aCdsRules = await this.cruder.read(constant.CDS_NAME.EMPLOYEE_ELIGIBILITY_RULE).where({ "target": constant.CDS_PROPERTY.EMPLOYEE });
+
+        const aCdsRules = await this.cruder.read(constant.CDS_NAME.EMPLOYEE_ELIGIBILITY_RULE, [['target', '=',constant.CDS_PROPERTY.EMPLOYEE], ['payComponent', '=', sPayCompCode]], 'AND' );
+
 
         aFilteredEmployeeList.forEach((employee) => {
             aPromise.push(new Promise(async resolve => {
@@ -33,11 +36,12 @@ class EligibilityRules {
                     if (bIsEligible) {
                         resolve(employee);
                     } else {
-                        if(bSimulationMode) {
+                        if (bSimulationMode) {
                             await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, this.aErrorMessages.filter(msg => msg.userId == employee.userId), false);
                         } else {
+                            //MIGUEL check if this is needed
                             const oResult = await this.payComponentRules.checkEmployeePayComponents(employee, sReferenceDate);
-                            await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, [...this.aErrorMessages.filter(msg => msg.userId == employee.userId), ...oResult.message ? [{message: oResult.message}] : [] ], false, null, oResult.bToUpdate, oResult.sDetails);
+                            await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, [...this.aErrorMessages.filter(msg => msg.userId == employee.userId), ...oResult.message ? [{ message: oResult.message }] : []], false, null, oResult.bToUpdate, oResult.sDetails);
                         }
                         resolve(null);
                     }
@@ -64,7 +68,7 @@ class EligibilityRules {
                         return await this._withNoPickList(oEmployee, oQueryObj.oRule, sReferenceDate, oEligbRule[0]).then(bValid => { return bValid; });
                     }
                 } else {
-                    this.aErrorMessages.push({ userId: oEmployee.userId, message: `No Cust School Transportation Eligibility found for userId ${oEmployee.userId}, date ${sReferenceDate}, field ${oQueryObj.oRule.ecField}, custElig ${oQueryObj.oRule.custEligibility}` });
+                    this.aErrorMessages.push({ userId: oEmployee.userId, message: `No Cust Health Card eligibility found for userId ${oEmployee.userId}, date ${sReferenceDate}, field ${oQueryObj.oRule.ecField}, custElig ${oQueryObj.oRule.custEligibility}` });
                     return false;
                 }
             })
@@ -76,7 +80,7 @@ class EligibilityRules {
     _getQuery = (oRule) => {
         return new Promise(async resolve => {
             resolve({
-                sQuery: this.queryBuilder.buildEligibilityQuery(oRule.ecField, oRule.custEligibility, constant.MDF_VALUES.SYSTEM_RECORD_STATUS),
+                sQuery: this.queryBuilder.buildEligibilityQuery(oRule.ecField, oRule.custEligibility, constant.MDF_VALUES.SYSTEM_RECORD_STATUS, oRule.custNat),
                 oRule: oRule
             });
         })
@@ -86,7 +90,7 @@ class EligibilityRules {
         return new Promise(async resolve => {
             await this.st_picklist_conn.run(SELECT.one.from(constant.CDS_NAME.PICK_LIST_OPTION).where({ "id": oEmployee[oRule.targetEntityProp] })).then(oPickRes => {
                 if (oPickRes) {
-                    let bValid = this.validator.validateWithOperator(oEligbRule.cust_Operator, oEligbRule.cust_Values, oPickRes.externalCode, oRule.isDate);
+                    let bValid = this.validator.validateWithOperator(oEligbRule.cust_Operator, oEligbRule.cust_Values, oPickRes.externalCode, oRule.isDate, sReferenceDate);
                     if (!bValid) {
                         this.aErrorMessages.push({ userId: oEmployee.userId, message: `Cust School Transportation Eligibility not valid for userId ${oEmployee.userId}, date ${sReferenceDate}, field ${oRule.ecField}, with value ${oPickRes.externalCode}, operator ${oEligbRule.cust_Operator}, cust values ${oEligbRule.cust_Values}` });
                     }
@@ -101,13 +105,14 @@ class EligibilityRules {
 
     _withNoPickList = (oEmployee, oRule, sReferenceDate, oEligbRule) => {
         return new Promise(resolve => {
-            let bValid = this.validator.validateWithOperator(oEligbRule.cust_Operator, oEligbRule.cust_Values, oEmployee[oRule.targetEntityProp], oRule.isDate);
+            let bValid = this.validator.validateWithOperator(oEligbRule.cust_Operator, oEligbRule.cust_Values, oEmployee[oRule.targetEntityProp], oRule.isDate, sReferenceDate);
             if (!bValid) {
                 this.aErrorMessages.push({ userId: oEmployee.userId, message: `Cust School Transportation Eligibility not valid for userId ${oEmployee.userId}, date ${sReferenceDate}, field ${oRule.ecField}, with value ${oEmployee[oRule.targetEntityProp]}, operator ${oEligbRule.cust_Operator}, cust values ${oEligbRule.cust_Values}` });
             }
             resolve(bValid);
         })
     }
+
 
 }
 

@@ -1,36 +1,166 @@
 const constant = require('../util/Constants');
 const queryBuilder = require('../util/QueryBuilder');
 const httpClient = require('../integration/HttpClient');
+const cruder = require('../util/Cruder');
+const payment = require('../payment/Payment');
+
 class AmountCalculatorHandler {
-    constructor() {
+    constructor(service, st_perPerson, st_picklist, st_healthCardRules, st_EmpEmployment) {
+        this.service = service;
         this.queryBuilder = new queryBuilder();
         this.httpClient = new httpClient();
+        this.cruder = new cruder(this.service);
+        this.st_perPerson = st_perPerson;
+        this.st_picklist =st_picklist;
+        this.payment = new payment(this.service, st_healthCardRules, st_EmpEmployment);
     }
 
-    calculateAmount = async (aEligibleDependents, sReferenceDate) => {
-        let aPromise = [];
-        
-        aEligibleDependents.forEach(dependent => {
-            aPromise.push(new Promise (async resolve => {
-                resolve(await this._getDependentAllowanceAmount(dependent, sReferenceDate));
-            }));
-        });
 
-        return await Promise.all(aPromise).then(aResults => { return aResults.reduce((sum, res) => sum + (Number(res.cust_Amount) || 0), 0) });
+    //new logic ported from java
+
+    /**
+     * Calculates the payment amount for an employee.
+     *
+     * @param {Object} empJob - The employee job data.
+     * @param {Date} referenceDate - The reference date for payment calculation.
+     * @param {string} custNat - The nationality of the customer.
+     * @return {Object|null} An object containing payment information, or null if not applicable.
+     */
+    calculateEmployeePayment = async (empJob, referenceDate, custNat) => {
+
+        const empRule = await this.getCustHealthCardRule(
+            empJob.userId, referenceDate, custNat, "employee"
+        );
+
+        const bApplicable = await this.payment.isEmployeeApplicable(empJob, referenceDate, empRule);
+
+        if (empRule && bApplicable) {
+            const amount = empRule.cust_Amount;
+            return { empJob, amount, additionalData: {} };
+        }
+        return null;
     }
 
-    _getDependentAllowanceAmount = async (oDependent, sReferenceDate) => {
-        return new Promise(async resolve => {
-            const sQuery = this.queryBuilder.buildDependentAllowanceQuery(constant.MDF_VALUES.SYSTEM_RECORD_STATUS);
-            const oAllowance = await this.httpClient.getAllowanceRules(sQuery, sReferenceDate);
-            if (oAllowance && oAllowance.length > 0) {
-                resolve(oAllowance[0]);
-            } else {
-                console.log(`No Amount found for Dependent ${oDependent.externalCode}, date ${sReferenceDate}`);
-                resolve(null);
+    /**
+     * Calculates the payment amount for an employee's spouse.
+     *
+     * @param {Object} empJob - The employee job data.
+     * @param {Object} spouse - The spouse details.
+     * @param {Date} referenceDate - The reference date for payment calculation.
+     * @param {string} custNat - The nationality of the customer.
+     * @param {Object} details - The eligible employee details.
+     * @return {number} The calculated spouse payment amount.
+     */
+    calculateEmployeeSpousePayment = async (empJob, spouse, referenceDate, custNat, details) => {
+        const spouseRule = getCustHealthCardRule(
+            spouse, referenceDate, custNat, "spouse_nat", empJob.userId
+        );
+
+        if (spouseRule && employeeSpousePaymentApplicable.isApplicable(spouse, referenceDate, spouseRule)) {
+            const spouseAmount = employeeSpousePaymentApplicable.getCustAmount(spouseRule);
+            if (details) {
+                details.addAmountForDep(spouse, spouseAmount);
             }
-        });
+            return spouseAmount;
+        }
+        return 0;
     }
+
+    /**
+     * Calculates the payment amount for an employee's child.
+     *
+     * @param {Object} empJob - The employee job data.
+     * @param {Object} child - The child details.
+     * @param {Date} referenceDate - The reference date for payment calculation.
+     * @param {string} custNat - The nationality of the customer.
+     * @param {Object} details - The eligible employee details.
+     * @return {number} The calculated child payment amount.
+     */
+    calculateEmployeeChildPayment = async (empJob, child, referenceDate, custNat, details) => {
+
+  
+        const childRule = await this.getCustHealthCardRule(
+            empJob.userId, referenceDate, custNat,
+            custNat, child.cust_Nationality
+        );
+
+        if (childRule && this.payment.isApplicable(childRule.cust_Frequency, childRule.effectiveStartDate , referenceDate)) {
+            const childAmount = childRule.cust_Amount;
+            if (details) {
+                //Miguel check this
+              //  details.addAmountForDep(child, childAmount);
+            }
+            return childAmount;
+        }
+        return 0;
+    }
+
+    getCustHealthCardRule = async (employeeID, referenceDate, ecField, custEligibility) => {
+
+        const gender = await this.fetchGenderForUser(employeeID);
+
+        if (ecField === "Nat") {
+            ecField = "national";  
+
+            return this.payment.getHealthCardRules(employeeID, referenceDate, ecField, custEligibility, gender);
+        
+        } else {
+
+         const perPersonal = await this.fetchPersonalForEmployee(employeeID);
+
+            const pickListNationalOpt = await this._getPickList(perPersonal.customString1);
+
+            if (!pickListNationalOpt || pickListNationalOpt.length === 0) {
+                console.info(`PickListOption Empty for NON EcField: ${ecField}, Gender: ${gender}, custEligibility: ${custEligibility}`);
+                return null;
+            }
+            ecField = this.getEligibilityForNonNatEmployee(pickListNationalOpt.externalCode);
+
+            return this.payment.getHealthCardRules(employeeID, referenceDate, ecField, custEligibility, gender);
+        }
+
+
+    }
+
+     getEligibilityForNonNatEmployee= (custEligibility) => {
+        const gccCountries = ["SA", "KW", "AE", "BH", "OM"];
+        if (gccCountries.includes(custEligibility.toUpperCase())) {
+            return "gcc";
+        }
+        return "non_national";
+    }
+
+    fetchGenderForUser = async (userID) => {
+        const oUserInfo = await this._getUserInformation(userID);
+        return this._mapGender(oUserInfo.gender);
+    };
+    
+    fetchPersonalForEmployee = async (userID) => {
+        return await this._getUserInformation(userID);
+    };
+    
+    _getUserInformation = async (userID) => {
+        return await this.st_perPerson.run(SELECT.one.from(constant.CDS_NAME.PER_PERSONAL).where({ "personIdExternal": userID }));
+    };
+
+    _getPickList = async (id) => {
+        return await this.st_picklist.run(SELECT.one.from(constant.CDS_NAME.PICK_LIST_OPTION).where({ "id": id }));
+    };
+
+
+    
+    _mapGender = (genderField) => {
+        const normalizedGender = genderField ? genderField.toLowerCase() : '';
+        if (normalizedGender === "m" || genderField === "1") {
+            return "M";
+        } else if (normalizedGender === "f" || genderField === "2") {
+            return "F";
+        }
+        return null;
+    };
+
+
+    //andre logic
 
 }
 

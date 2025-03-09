@@ -25,7 +25,16 @@ POST {{server}}/odata/v4/pc-hrsrv/executeCompHRCalculation
 Content-Type: application/json
 
 {
-    "userIds": ["00010818"],
+    "userIds": [
+      "00010818",
+      "00006252",
+      "00006254",
+      "00017079",
+      "00600396",
+      "00001842",
+      "00013515",
+      "28"
+      ],
     "foJobs": [],
     "departments": [],
     "groups": [],
@@ -34,7 +43,30 @@ Content-Type: application/json
     "simulationMode": false,
     "emails": [],
     "referenceDate": "2025-01-01",
-    "PayComponent": {
+    "payComponent": {
+      "ID": "25611292-c3de-4f47-a109-b4f5bc1026dc",
+      "name": "National Health Card",
+     "code": "3125"
+  },
+    "custEmployeeGroups": []
+}
+
+
+### test copy from java
+POST {{server}}/odata/v4/pc-hrsrv/executeCompHRCalculation
+Content-Type: application/json
+
+{
+    "userIds": ["00013515"],
+    "foJobs": [],
+    "departments": [],
+    "groups": [],
+    "orgUnits": [],
+    "hrPersonnelAreas": [],
+    "simulationMode": false,
+    "emails": [],
+    "referenceDate": "2025-01-01",
+    "payComponent": {
       "ID": "25611292-c3de-4f47-a109-b4f5bc1026dc",
       "name": "National Health Card",
      "code": "3125"

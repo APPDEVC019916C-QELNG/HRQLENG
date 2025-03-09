@@ -1,75 +1,75 @@
 @server = http://localhost:4004
 
 ###
-GET {{server}}/odata/v4/pc-stsrv/$metadata
+GET {{server}}/odata/v4/pc-hrsrv/$metadata
 Content-Type: application/json
 
 ###
-GET {{server}}/odata/v4/pc-stsrv/Test
+GET {{server}}/odata/v4/pc-hrsrv/PayComponents
 Content-Type: application/json
 
 ###
-GET {{server}}/odata/v4/pc-stsrv/OrgUnit
+GET {{server}}/odata/v4/pc-hrsrv/OrgUnit
 Content-Type: application/json
 
 ###
-GET {{server}}/odata/v4/pc-stsrv/OrgUnitGroup
+GET {{server}}/odata/v4/pc-hrsrv/OrgUnitGroup
 Content-Type: application/json
 
 ###
-GET {{server}}/odata/v4/pc-stsrv/Department
+GET {{server}}/odata/v4/pc-hrsrv/Department
 Content-Type: application/json
 
 ###
-GET {{server}}/odata/v4/pc-stsrv/FoJob
+GET {{server}}/odata/v4/pc-hrsrv/FoJob
 Content-Type: application/json
 
 ###
-GET {{server}}/odata/v4/pc-stsrv/HRPersonnelArea
+GET {{server}}/odata/v4/pc-hrsrv/HRPersonnelArea
 Content-Type: application/json
 
 ###
-GET {{server}}/odata/v4/pc-stsrv/CustEmployeeGroup
-Content-Type: application/json
-
-
-###
-GET {{server}}/odata/v4/pc-stsrv/TestRules
-Content-Type: application/json
-
-###
-GET {{server}}/odata/v4/pc-stsrv/ST_EligibilityRules
-Content-Type: application/json
-
-###
-GET {{server}}/odata/v4/pc-stsrv/ST_EligibilityRules?$filter=cust_ECField eq 'empStatus'
-Content-Type: application/json
-
-###
-GET {{server}}/odata/v4/pc-stsrv/ST_EligibilityRules?$filter=cust_ECField eq 'empGroup'
-Content-Type: application/json
-
-###
-GET {{server}}/odata/v4/pc-stsrv/ST_EligibilityRules?$filter=cust_ECField eq 'empSubGroup'
-Content-Type: application/json
-
-###
-GET {{server}}/odata/v4/pc-stsrv/ST_EligibilityRules?$filter=cust_ECField eq 'compTransp'
-Content-Type: application/json
-
-###
-GET {{server}}/odata/v4/pc-stsrv/ST_EligibilityRules?$filter=cust_EligibilityType eq 'children'
-Content-Type: application/json
-
-###
-GET {{server}}/odata/v4/pc-stsrv/ST_EligibilityRules?$filter=cust_ECField eq 'empStatus' and cust_EligibilityType eq 'employee' and effectiveStartDate le '2025-01-01' and mdfSystemRecordStatus eq 'N'
-Content-Type: application/json
-
-###
-GET {{server}}/odata/v4/pc-stsrv/ST_DependentsDetails?$filter=cust_Dependents_mdfSystemTransactionSequence eq '2'
+GET {{server}}/odata/v4/pc-hrsrv/CustEmployeeGroup
 Content-Type: application/json
 
 
 ###
-GET {{server}}/odata/v4/pc-stsrv/ST_EmpPayCompRecurring
+GET {{server}}/odata/v4/pc-hrsrv/TestRules
+Content-Type: application/json
+
+###
+GET {{server}}/odata/v4/pc-hrsrv/ST_EligibilityRules
+Content-Type: application/json
+
+###
+GET {{server}}/odata/v4/pc-hrsrv/ST_EligibilityRules?$filter=cust_ECField eq 'empStatus'
+Content-Type: application/json
+
+###
+GET {{server}}/odata/v4/pc-hrsrv/ST_EligibilityRules?$filter=cust_ECField eq 'empGroup'
+Content-Type: application/json
+
+###
+GET {{server}}/odata/v4/pc-hrsrv/ST_EligibilityRules?$filter=cust_ECField eq 'empSubGroup'
+Content-Type: application/json
+
+###
+GET {{server}}/odata/v4/pc-hrsrv/ST_EligibilityRules?$filter=cust_ECField eq 'compTransp'
+Content-Type: application/json
+
+###
+GET {{server}}/odata/v4/pc-hrsrv/ST_EligibilityRules?$filter=cust_EligibilityType eq 'children'
+Content-Type: application/json
+
+###
+GET {{server}}/odata/v4/pc-hrsrv/ST_EligibilityRules?$filter=cust_ECField eq 'empStatus' and cust_EligibilityType eq 'employee' and effectiveStartDate le '2025-01-01' and mdfSystemRecordStatus eq 'N'
+Content-Type: application/json
+
+###
+GET {{server}}/odata/v4/pc-hrsrv/ST_DependentsDetails?$filter=cust_Dependents_mdfSystemTransactionSequence eq '2'
+Content-Type: application/json
+
+
+### MIGUEL
+GET {{server}}/odata/v4/pc-hrsrv/ST_EmpPayCompRecurring
 Content-Type: application/json

@@ -8,6 +8,7 @@ service pcHRsrv {
     entity EmployeeEligibilityRule as projection on db.EmployeeEligibilityRule;
     entity ChildEligibilityRules as projection on db.ChildEligibilityRules;
     entity SpouseEligibilityRules as projection on db.SpouseEligibilityRules;
+    entity PayComponents as projection on db.PayComponents;
 
     entity ExecutionLog as projection on db.ExecutionLog;
     entity AllExecutionLog as projection on db.ExecutionLog;
@@ -22,12 +23,9 @@ service pcHRsrv {
                               simulationMode : Boolean,
                               emails : array of String,
                               referenceDate : Date,
-                              PayComponent: PayComponents,
+                              payComponent: PayComponents,
                               custEmployeeGroups : CustEmployeeGroup) returns String;
 
-     @cds.persistence:{table,skip:false}
-    @cds.autoexpose
-    entity PayComponents as projection on db.PayComponents;
 
     @cds.persistence: {
         table,

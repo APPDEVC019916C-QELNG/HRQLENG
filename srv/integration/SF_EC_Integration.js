@@ -38,6 +38,7 @@ class SF_EC_Integration {
             const aEmpCompObj = await this._getAllEmpCompensation(oEmployee, sReferenceDate);
             const bValidReferenceDate = this._validateRefDateEqual(aEmpCompObj, sReferenceDate);
             if (bValidReferenceDate) {
+                //MIGUEL
                 // Scenario 4.1 - Create EmpPayCompRecurring for each EmpCompensation Record
                 return await this._runScenario4_1(bSimulationMode, aEmpCompObj, iAmount);
             } else {

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:atom="http://www.w3.org/2005/Atom">
+    <edmx:DataServices m:DataServiceVersion="2.0" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+        <Schema Namespace="SFODataSet" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:sf="http://www.successfactors.com/edm/sf" xmlns:sap="http://www.successfactors.com/edm/sap">
+            <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+                <EntitySet Name="PerPersonal" EntityType="SFOData.PerPersonal" sap:label="Personal Information" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:deletable="false">
+                    <Documentation>
+                        <Summary>PerPersonal</Summary>
+                        <LongDescription>Contains personal information for an employee.</LongDescription>
+                        <sap:tagcollection>
+                            <sap:tag>Employee Central (EC)</sap:tag>
+                            <sap:tag>EC - Personal Information</sap:tag>
+                        </sap:tagcollection>
+                    </Documentation>
+                </EntitySet>
+            </EntityContainer>
+        </Schema>
+        <Schema Namespace="SFOData" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:sf="http://www.successfactors.com/edm/sf" xmlns:sap="http://www.successfactors.com/edm/sap">
+            <EntityType Name="PerPersonal">
+                <Key>
+                    <PropertyRef Name="personIdExternal"></PropertyRef>
+                    <PropertyRef Name="startDate"></PropertyRef>
+                </Key>
+                <Property Name="attachmentId" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" sap:label="Attachment"></Property>
+                <Property Name="createdBy" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="100" sap:label="Created By"></Property>
+                <Property Name="createdDateTime" Type="Edm.DateTimeOffset" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="Created Date Time"></Property>
+                <Property Name="createdOn" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="Created On"></Property>
+                <Property Name="customString1" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="256" sap:picklist="QG_SAP_nationality" sap:label="Nationality"></Property>
+                <Property Name="customString15" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="256" sap:picklist="Bloodgroup_ONB" sap:label="ONB Blood Group"></Property>
+                <Property Name="customString16" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="256" sap:label="customString16"></Property>
+                <Property Name="customString17" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="256" sap:picklist="Hire Type" sap:label="customString17"></Property>
+                <Property Name="customString18" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="256" sap:label="customString18"></Property>
+                <Property Name="customString19" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="256" sap:label="customString19"></Property>
+                <Property Name="customString2" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="256" sap:picklist="QG_SAP_PersonalInfo_NationalityArabic" sap:label="Nationality (in Arabic)"></Property>
+                <Property Name="customString20" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="256" sap:label="customString20"></Property>
+                <Property Name="customString21" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="256" sap:label="customString21"></Property>
+                <Property Name="customString22" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="256" sap:picklist="Candidate Seniority" sap:label="customString22"></Property>
+                <Property Name="customString23" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="256" sap:picklist="Pay Scale Group" sap:label="customString23"></Property>
+                <Property Name="displayName" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Full Name"></Property>
+                <Property Name="endDate" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="End Date"></Property>
+                <Property Name="firstName" Type="Edm.String" Nullable="true" sap:required="true" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="First Name"></Property>
+                <Property Name="gender" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="2" sap:label="Gender"></Property>
+                <Property Name="includeAllRecords" Type="Edm.Boolean" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="false" sap:sortable="false" sap:filterable="true" sap:label="Include All Records"></Property>
+                <Property Name="lastModifiedBy" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="100" sap:label="Last Modified By"></Property>
+                <Property Name="lastModifiedDateTime" Type="Edm.DateTimeOffset" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="Last Modified Date Time"></Property>
+                <Property Name="lastModifiedOn" Type="Edm.DateTime" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="false" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="Last Modified On"></Property>
+                <Property Name="lastName" Type="Edm.String" Nullable="true" sap:required="true" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Last Name"></Property>
+                <Property Name="maritalStatus" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="50" sap:picklist="ecMaritalStatus" sap:label="Actual Marital Status"></Property>
+                <Property Name="middleName" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="128" sap:label="Middle Name"></Property>
+                <Property Name="notes" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="4000" sap:label="Comments"></Property>
+                <Property Name="operation" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="false" sap:sortable="false" sap:filterable="false" sap:label="operation"></Property>
+                <Property Name="personIdExternal" Type="Edm.String" Nullable="false" sap:required="true" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="100" sap:label="Person ID External"></Property>
+                <Property Name="preferredName" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="128" sap:label="Preferred Name"></Property>
+                <Property Name="religion" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="256" sap:picklist="religion" sap:label="Religion"></Property>
+                <Property Name="startDate" Type="Edm.DateTime" Nullable="false" sap:required="true" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="true" sap:filterable="true" sap:display-format="Date" sap:label="Start Date"></Property>
+                <Property Name="title" Type="Edm.String" Nullable="true" sap:required="false" sap:creatable="false" sap:updatable="false" sap:upsertable="true" sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="128" sap:picklist="title" sap:label="Title"></Property>
+            </EntityType>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

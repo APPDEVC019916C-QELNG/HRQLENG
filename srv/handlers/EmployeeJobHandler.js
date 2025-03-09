@@ -1,8 +1,16 @@
+const { t } = require('@sap/cds/lib/utils/tar');
 const queryBuilder = require('../util/QueryBuilder');
+const AmountCalculatorHandler = require('./AmountCalculatorHandler');
+const DependentsHandler = require('./DependentsHandler');
+const constant = require('../util/Constants');
+
 class EmployeeJobHandler {
 
-    constructor() {
+    constructor(service, st_perPerson, st_picklist, st_healthCardRules, st_EmpEmployment, bottleneck, executionLogHandler) {
         this.queryBuilder = new queryBuilder();
+        this.amountCalculatorHandler = new AmountCalculatorHandler(service, st_perPerson, st_picklist, st_healthCardRules, st_EmpEmployment);
+        this.dependentsHandler = new DependentsHandler(service, st_picklist, bottleneck, executionLogHandler, st_perPerson, st_healthCardRules, st_EmpEmployment);
+
     }
 
     getFilteredEmployeeListQuery = async (oPayload) => {
@@ -45,6 +53,64 @@ class EmployeeJobHandler {
 
             resolve(oFilter);
         });
+    }
+
+
+    processEligibleEmployees = async (eligibleEmployees, referenceDate, custNat) => {
+        let eligibleDetailsList = [];
+
+        for (const employee of eligibleEmployees) {
+            const details = await this.processEmployee(employee, referenceDate, custNat);
+
+            // Process dependents independently
+
+            const dependentList = await this.dependentsHandler.getDependentsList(employee.userId, referenceDate);
+
+            if (dependentList && dependentList.length) {
+
+                // Separate dependents into two categories
+                const children = dependentList.filter(dependent => dependent.cust_FamilyMember === constant.MDF_VALUES.FAMILIY_KEY.CHILDREN);
+                const spouse = dependentList.filter(dependent => dependent.cust_FamilyMember === constant.MDF_VALUES.FAMILIY_KEY.SPOUSE);
+
+
+                const oChildrenAmount = await this.dependentsHandler.processChildDependent(employee, children, referenceDate, custNat);
+                const oSpouseAmount = await this.dependentsHandler.processSpouseDependent(employee, spouse, referenceDate, custNat);
+
+            
+                
+                debugger;
+
+                //const totalDependentAmount = await this.dependentsHandler.processDependentDetails(employee, lDependentsDetails, referenceDate, custNat, details);
+
+                //details.emplyeeAount = totalDependentAmount;
+
+                //eligibleDetailsList.push(details);
+
+
+            }
+
+
+        }
+
+        return eligibleDetailsList;
+
+    }
+
+    processEmployee = async (employee, referenceDate, custNat) => {
+
+        let employeeDetails = await this.amountCalculatorHandler.calculateEmployeePayment(employee, referenceDate, custNat);
+
+        if (employeeDetails === null) {
+
+            employeeDetails = {
+                "empJob": employee,
+                "amount": 0,
+                "additionalData": {}
+            };
+        }
+
+        return employeeDetails;
+
     }
 
 }
