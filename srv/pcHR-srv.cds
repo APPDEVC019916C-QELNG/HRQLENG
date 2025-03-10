@@ -13,7 +13,6 @@ service pcHRsrv {
     entity ExecutionLog as projection on db.ExecutionLog;
     entity AllExecutionLog as projection on db.ExecutionLog;
 
-    //MIGUEL TO CHANGE
     action executeCompHRCalculation(userIds : array of String,
                               foJobs : array of FoJob,
                               departments : array of Department,

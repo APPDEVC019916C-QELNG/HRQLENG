@@ -55,7 +55,7 @@ class QueryBuilder {
     }
 
     buildEmployeeRecurringPayCompQuery = (userId, sPayComponent) => {
-        return `userId eq '${userId}' and payComponent eq '${sPayComponent}'`;
+        return `userId eq '${userId}' and payComponentCode eq '${sPayComponent}'`;
     }
 
     buildEmpCompensationQuery = (sUserId) => {

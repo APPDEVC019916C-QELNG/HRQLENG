@@ -12,19 +12,19 @@ class SF_EC_Integration {
 
     runSfEcUpdate = async (oEmployee, iAmount, sReferenceDate, aRecurringPayComponents, bSimulationMode, sPayComponent) => {
         if (aRecurringPayComponents && aRecurringPayComponents.length) {
-            const bValidAmountInAllRecords = this._validateAmount(aRecurringPayComponents, iAmount);
+            const bValidAmountInAllRecords = this._validateAmount(aRecurringPayComponents, iAmount, oEmployee.count);
             if (!bValidAmountInAllRecords) {
                 // Scenario 1 - Calculated Amount equal to all Employee Pay Components
                 return this._runScenario1();
 
             } else {
 
-                return await this._runScenario2and3(bSimulationMode, oEmployee.empJob, iAmount, sReferenceDate, sPayComponent);
+                return await this._runScenario2and3(bSimulationMode, oEmployee.empJob, iAmount, sReferenceDate, sPayComponent, oEmployee.count);
 
             }
         } else {
             // Scenario 3: No Pay Components found for Employee
-            return await this._runScenario2and3(bSimulationMode, oEmployee.empJob, iAmount, sReferenceDate, sPayComponent);
+            return await this._runScenario2and3(bSimulationMode, oEmployee.empJob, iAmount, sReferenceDate, sPayComponent, oEmployee.count);
         }
     }
 
@@ -35,44 +35,14 @@ class SF_EC_Integration {
         }
     }
 
-    _runScenario2 = (bSimulationMode, oEmployee, iAmount, sReferenceDate) => {
-        return new Promise(async resolve => {
-            if (bSimulationMode) {
-                resolve({ bToUpdate: true, sDetails: constant.DETAILS.SCENARIO_2_SIMULATION });
-            } else {
-                const oEmpCompObj = await this._getActiveEmpCompensation(oEmployee, sReferenceDate);
-                const bValidReferenceDate = this._validateRefDateEqual([oEmpCompObj], sReferenceDate);
-                if (bValidReferenceDate) {
-                    const oPayCompRes = await this._createRecurringPayComponent(oEmpCompObj, iAmount, sReferenceDate);
-                    if (oPayCompRes.d && oPayCompRes.d[0].httpCode == 200) {
-                        resolve({ bToUpdate: true, sDetails: constant.DETAILS.SCENARIO_2 });
-                    } else {
-                        resolve({ bToUpdate: true, sDetails: constant.DETAILS.ERROR, message: oPayCompRes.d ? oPayCompRes.d[0].mesage : null });
-                    }
-                } else {
-                    const oPortletRes = await this._createCompensationPortlet(oEmpCompObj, sReferenceDate);
-                    if (oPortletRes.d && oPortletRes.d[0].httpCode == 200) {
-                        const oPayCompRes = await this._createRecurringPayComponent(oEmpCompObj, iAmount, sReferenceDate);
-                        if (oPayCompRes.d && oPayCompRes.d[0].httpCode == 200) {
-                            resolve({ bToUpdate: true, sDetails: constant.DETAILS.SCENARIO_2 });
-                        } else {
-                            resolve({ bToUpdate: true, sDetails: constant.DETAILS.ERROR, message: oPayCompRes.d ? oPayCompRes.d[0].mesage : null });
-                        }
-                    } else {
-                        resolve({ bToUpdate: true, sDetails: constant.DETAILS.ERROR, message: oPortletRes.d ? oPortletRes.d[0].mesage : null });
-                    }
-                }
-            }
-        });
-    }
 
-    _runScenario2and3 = (bSimulationMode, oEmployee, iAmount, sReferenceDate, sPayComponent) => {
+    _runScenario2and3 = (bSimulationMode, oEmployee, iAmount, sReferenceDate, sPayComponent, count) => {
         return new Promise(async resolve => {
             if (bSimulationMode) {
                 resolve({ bToUpdate: true, sDetails: constant.DETAILS.SCENARIO_2_SIMULATION });
             } else {
 
-                const oPayCompRes = await this._createRecurringPayComponent(oEmployee, iAmount, sReferenceDate, sPayComponent);
+                const oPayCompRes = await this._createRecurringPayComponent(oEmployee, iAmount, sReferenceDate, sPayComponent, count);
                 if (oPayCompRes.d && oPayCompRes.d[0].httpCode == 200) {
                     resolve({ bToUpdate: true, sDetails: constant.DETAILS.SCENARIO_2 }); //MIGUEL
                 } else {
@@ -108,11 +78,10 @@ class SF_EC_Integration {
         });
     }
 
-    _validateAmount = (aRecurringPayComponents, iAmount, iUnits, iValue) => {
+    _validateAmount = (aRecurringPayComponents, iAmount, iUnits) => {
         return aRecurringPayComponents.some(oComp =>
             oComp.paycompvalue !== iAmount ||
-            oComp.numberOfUnits !== iUnits ||
-            oComp.value !== iValue
+            oComp.numberOfUnits !== iUnits 
         );
     }
 
@@ -208,8 +177,8 @@ class SF_EC_Integration {
         return await this.httpClient.upsertEmpCompensation(oNewEmpCompObj);
     }
 
-    _createRecurringPayComponent = async (oEmpCompObj, iAmount, sReferenceDate, component) => {
-        return await this.httpClient.upsertEmpPayCompNonRecurring(this._buildRecurringComponent(oEmpCompObj, iAmount, false, sReferenceDate, constant.MDF_VALUES.CURRENCY_CODE, component));
+    _createRecurringPayComponent = async (oEmpCompObj, iAmount, sReferenceDate, component, count) => {
+        return await this.httpClient.upsertEmpPayCompNonRecurring(this._buildRecurringComponent(oEmpCompObj, iAmount, false, sReferenceDate, constant.MDF_VALUES.CURRENCY_CODE, component, count));
     }
 
     _updateRecurringPayComponents = async (aComponentsToUpdate, iAmount) => {
@@ -236,16 +205,18 @@ class SF_EC_Integration {
         return await Promise.all(aPromise).then(async aResults => { return await this.httpClient.upsertEmpPayCompRecurring(aResults) });
     }
 
-    _buildRecurringComponent = (oComponent, iAmount, bSequence, sReferenceDate, sCurrencyCode, sPayComponent) => {
+    _buildRecurringComponent = (oComponent, iAmount, bSequence, sReferenceDate, sCurrencyCode, sPayComponent, count) => {
         let oReturnComponent = {};
+
+        const referenceYear = new Date(sReferenceDate).getFullYear();
 
         oReturnComponent["userId"] = oComponent.userId;
         oReturnComponent["payComponentCode"] = sPayComponent ? sPayComponent.toString() : oComponent.payComponent;
         oReturnComponent["value"] = iAmount;
-        // oReturnComponent["customString1 "] = "HMC Pmts 2025" //“HMC Pmts –YEAR” (YEAR should be the “Reference Year”);
-        oReturnComponent["numberOfUnits"] = "2"; //need to calculate this, forgot
+        // oReturnComponent["customString1 "] = "HMC Pmts "+ referenceYear.toString() //“HMC Pmts –YEAR” (YEAR should be the “Reference Year”);
+        oReturnComponent["numberOfUnits"] = count.toString(); //need to calculate this, forgot
         // oReturnComponent["unitOfMeasure "] = "Persons";
-        oReturnComponent["payDate"] = `/Date(${new Date("2025-01-01").getTime()})/` //1st January of the “Reference Year”
+        oReturnComponent["payDate"] = `/Date(${new Date(`${referenceYear}-01-01T00:00:00Z`).getTime()})/` //1st January of the “Reference Year”
         oReturnComponent["currencyCode"] = sCurrencyCode ? sCurrencyCode : oComponent.currencyCode;
         oReturnComponent["sequenceNumber"] = this._newTimeStamp() //Timestamp of execution (dd_mm_yyyy_hh_mm_ss)
 
@@ -257,6 +228,11 @@ class SF_EC_Integration {
 
         return datenow.toISOString().replace("T", " ").substring(0, 19);
     }
+
+     _getFirstJanuary = (referenceYear) => {
+        const year = new Date(referenceYear).getFullYear(); // Extract year
+        return new Date(`${year}-01-01T00:00:00Z`); // Construct 1st January of that year in UTC
+    };
 }
 
 module.exports = SF_EC_Integration;

@@ -21,11 +21,11 @@ class ExecutionLogHandler {
         });
     }
 
-    createExecutionLogSingleEntry = async (oEmployee, sReferenceDate, sExecutionID, bSimulationMode, aErrorMessages, bEligible, iAmount, bToUpdate, sDetails) => {
+    createExecutionLogSingleEntry = async (oEmployee, sReferenceDate, sExecutionID, bSimulationMode, aErrorMessages, bEligible, iAmount, bToUpdate, sDetails, sPayCompCode) => {
         await this._createLogEntry(await this._buildPayload(oEmployee, sReferenceDate, sExecutionID, bSimulationMode, aErrorMessages, bEligible, iAmount, bToUpdate, sDetails));
     }
 
-    _buildPayload = async (oEmployee, sReferenceDate, sExecutionID, bSimulationMode, aErrorMessages, bEligible, iAmount, bToUpdate, sDetails) => {
+    _buildPayload = async (oEmployee, sReferenceDate, sExecutionID, bSimulationMode, aErrorMessages, bEligible, iAmount, bToUpdate, sDetails, sPayCompCode) => {
         return {
             "executionID": sExecutionID,
             "simulationMode": bSimulationMode,
@@ -36,7 +36,7 @@ class ExecutionLogHandler {
             "job": oEmployee && oEmployee.jobCode ? await this._getJob(oEmployee.jobCode) : null,
             "hRPersonnelArea": oEmployee && oEmployee.customString8 ? await this._getHrArea(oEmployee.customString8) : null,
             "employeeGroup": oEmployee && oEmployee.customString10 ? await this._getEmpGroup(oEmployee.customString10) : null,
-            "payComponent": constant.MDF_VALUES.PAY_COMPONENT,
+            "payComponent": sPayCompCode,
             "eligible": bEligible,
             "referenceDate": sReferenceDate,
             "amount": iAmount,

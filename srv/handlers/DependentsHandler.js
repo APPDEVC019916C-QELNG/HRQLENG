@@ -52,31 +52,39 @@ class DependentsHandler {
 
     processChildDependent = async (employee, children, referenceDate, custNat) => {
         let totalAmount = 0;
+        let count = 0; // Counter for the number of times an amount was added
     
         for (const child of children) {
             if (await this.childrenPayment.isApplicable(child, referenceDate, custNat)) {
                 let amount = await this.amountCalculatorHandler.calculateEmployeeChildPayment(employee, child, referenceDate, custNat, child);
                 totalAmount += parseFloat(amount) || 0; // Ensures numeric addition
+                count++; // Increment counter each time an amount is added
             }
         }
+        const totalAmountString = totalAmount.toString();
     
-        return totalAmount.toString(); // Return as string if needed
+        return {totalAmountString, count}; 
     };
+    
     
 
     processSpouseDependent = async (employee, spouses, referenceDate, custNat) => {
 
         let totalAmount = 0;
+        let count = 0; // Counter for the number of times an amount was added
     
         for (const spouse of spouses) {
             if (await this.spousePayment.isApplicable(spouse, referenceDate, custNat)) {
                 let amount = await this.amountCalculatorHandler.calculateEmployeeChildPayment(employee, spouse, referenceDate, custNat, spouse);
                 totalAmount += parseFloat(amount) || 0; // Ensures numeric addition
+                count++; // Increment counter each time an amount is added
+
             }
         }
     
-        return totalAmount.toString(); // Return as string if needed
-
+        const totalAmountString = totalAmount.toString();
+    
+        return {totalAmountString, count }; 
 
     };
 

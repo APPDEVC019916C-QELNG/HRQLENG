@@ -57,7 +57,12 @@ POST {{server}}/odata/v4/pc-hrsrv/executeCompHRCalculation
 Content-Type: application/json
 
 {
-    "userIds": ["00013515"],
+    "userIds": [
+    "00013515",
+    "00002087",
+    "00013515",
+    "28"
+    ],
     "foJobs": [],
     "departments": [],
     "groups": [],

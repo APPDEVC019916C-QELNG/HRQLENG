@@ -60,6 +60,7 @@ class EmployeeJobHandler {
         let eligibleDetailsList = [];
 
         for (const employee of eligibleEmployees) {
+            const numberOfUnits = 1;
             const details = await this.processEmployee(employee, referenceDate, custNat);
 
             // Process dependents independently
@@ -73,15 +74,16 @@ class EmployeeJobHandler {
                 const spouse = dependentList.filter(dependent => dependent.cust_FamilyMember === constant.MDF_VALUES.FAMILIY_KEY.SPOUSE);
 
 
-                const oChildrenAmount = await this.dependentsHandler.processChildDependent(employee, children, referenceDate, custNat);
+                const childrenResult  = await this.dependentsHandler.processChildDependent(employee, children, referenceDate, custNat);
                 
                 //MIGUEL, test with andre
                 //const oSpouseAmount = await this.dependentsHandler.processSpouseDependent(employee, spouse, referenceDate, custNat);
 
             
-                
 
-                details.amount = this.sumStrings(oChildrenAmount,details.amount);
+                details.amount = this.sumStrings(childrenResult.totalAmountString ,details.amount);
+
+                details.count = numberOfUnits+childrenResult.count;
 
                 //const totalDependentAmount = await this.dependentsHandler.processDependentDetails(employee, lDependentsDetails, referenceDate, custNat, details);
 

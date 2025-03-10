@@ -52,9 +52,8 @@ class HttpClient {
         return await this._doGet(constant.CDS_NAME.EMP_JOB, sQuery, sReferenceDate, true, true, "userId");
     }
 
-    //MIGUEl
-    getEmpPayCompRecurring = async (sQuery, sReferenceDate, bToDate) => {
-        return await this._doGet(constant.CDS_NAME.EMP_PAY_COMP_RECURRING, sQuery, sReferenceDate, true, bToDate);
+    getEmpPayCompNonRecurring = async (sQuery, sReferenceDate, bToDate) => {
+        return await this._doGet(constant.CDS_NAME.EMP_PAY_COMP_NON_RECURRING, sQuery, sReferenceDate, true, bToDate);
     }
 
     getEmpCompensation = async (sQuery, sReferenceDate, bFromDate, bToDate) => {
