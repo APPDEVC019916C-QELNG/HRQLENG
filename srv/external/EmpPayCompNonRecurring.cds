@@ -1,4 +1,4 @@
-/* checksum : 2cf4dd5d65cfec01ad0d482cab251245 */
+/* checksum : 27a1b302424e67398d176192f6a05f14 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 service EmpPayCompNonRecurring {};
@@ -70,6 +70,15 @@ entity EmpPayCompNonRecurring.EmpPayCompNonRecurring {
   @sap.required : 'false'
   @sap.creatable : 'false'
   @sap.updatable : 'false'
+  @sap.upsertable : 'true'
+  @sap.visible : 'true'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  @sap.label : 'Reference Number'
+  customString1 : String(256);
+  @sap.required : 'false'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
   @sap.upsertable : 'false'
   @sap.visible : 'true'
   @sap.sortable : 'true'
@@ -109,6 +118,15 @@ entity EmpPayCompNonRecurring.EmpPayCompNonRecurring {
   @sap.creatable : 'false'
   @sap.updatable : 'false'
   @sap.upsertable : 'true'
+  @sap.visible : 'true'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  @sap.label : 'Number'
+  numberOfUnits : Double;
+  @sap.required : 'false'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.upsertable : 'true'
   @sap.visible : 'false'
   @sap.sortable : 'false'
   @sap.filterable : 'false'
@@ -133,6 +151,15 @@ entity EmpPayCompNonRecurring.EmpPayCompNonRecurring {
   @sap.display.format : 'Date'
   @sap.label : 'Issue Date'
   payDate : Date not null;
+  @sap.required : 'false'
+  @sap.creatable : 'false'
+  @sap.updatable : 'false'
+  @sap.upsertable : 'true'
+  @sap.visible : 'true'
+  @sap.sortable : 'false'
+  @sap.filterable : 'false'
+  @sap.label : 'Unit of Measure'
+  unitOfMeasure : String(128);
   @sap.required : 'true'
   @sap.creatable : 'false'
   @sap.updatable : 'false'

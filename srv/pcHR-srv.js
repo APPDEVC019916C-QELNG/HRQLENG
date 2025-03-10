@@ -7,6 +7,11 @@ const ExecutionLogHandler = require('./handlers/ExecutionLogHandler');
 const Bottleneck = require("bottleneck");
 const EventEmitter = require("events");
 const HttpClient = require('./integration/HttpClient');
+const PayComponentRules = require('./rules/PayComponentRules');
+const SfecIntegration = require('./integration/SF_EC_Integration');
+
+
+
 
 module.exports = cds.service.impl(async function () {
     // CDS Entities //
@@ -23,6 +28,8 @@ module.exports = cds.service.impl(async function () {
     const st_EmpEmployment = await cds.connect.to('EmpEmployment');
 
 
+
+
     // Global Classes //
     EventEmitter.defaultMaxListeners = 20; // Increase limit globally
     const bottleneck = new Bottleneck({ minTime: 10, maxConcurrent: 500, });
@@ -31,7 +38,10 @@ module.exports = cds.service.impl(async function () {
     const employeeJobHandler = new EmployeeJobHandler(this, st_perPerson, st_picklist, st_healthCardRules, st_EmpEmployment, bottleneck, executionLogHandler);
     const eligibilityRules = new EligibilityRules(this, st_picklist, bottleneck, executionLogHandler);
 
-    
+    const payComponentRules = new PayComponentRules();
+    const sfecIntegration = new SfecIntegration();
+
+
 
     // Success Factors API Handlers //
     this.on("READ", OrgUnit, async req => {
@@ -76,7 +86,7 @@ module.exports = cds.service.impl(async function () {
     _executeProcess = async (oRequest, sExecutionID) => {
         // Get Employee Data from UI Filter Criteria //
         const sQuery = await employeeJobHandler.getFilteredEmployeeListQuery(oRequest);
-        
+
         const referenceDate = _getReferenceDate(oRequest.referenceDate);
 
         const sPayCompCode = oRequest.payComponent.code;
@@ -84,7 +94,7 @@ module.exports = cds.service.impl(async function () {
         let aFilteredEmployeeList = [];
 
         const httpClient = new HttpClient();
-        aFilteredEmployeeList = await httpClient.getEmpJob(sQuery,referenceDate);
+        aFilteredEmployeeList = await httpClient.getEmpJob(sQuery, referenceDate);
 
         console.log("Filtered Employee List length " + aFilteredEmployeeList.length);
         const start = Date.now();
@@ -93,34 +103,50 @@ module.exports = cds.service.impl(async function () {
 
             oRequest.getComponent
 
-            const aEligibleEmployeeRes = await eligibilityRules.getEligibleEmployeeList(aFilteredEmployeeList,referenceDate, sExecutionID, sPayCompCode, oRequest.simulationMode);
+            const aEligibleEmployeeRes = await eligibilityRules.getEligibleEmployeeList(aFilteredEmployeeList, referenceDate, sExecutionID, sPayCompCode, oRequest.simulationMode);
 
             console.log("Eligible Employee List length " + aEligibleEmployeeRes.length);
             console.log(`ELIG QUERY Time: ${Date.now() - start}ms`);
 
             if (aEligibleEmployeeRes && aEligibleEmployeeRes.length) {
-                
+
                 const custNat = _determineCustNationality(sPayCompCode);
 
-                const details = await employeeJobHandler.processEligibleEmployees(aEligibleEmployeeRes, referenceDate, custNat);
+                const elegibleList = await employeeJobHandler.processEligibleEmployees(aEligibleEmployeeRes, referenceDate, custNat);
 
-
-                
-                //const details = await amountCalculatorHandler.calculateEmployeePayment(aEligibleEmployeeRes, referenceDate, custNat);
-                
-                
-                //here i need to processEmployee
-                console.log("A Processed Allowance length " + aProcessedAllowance.length);
+                console.log("A Processed Allowance length " + elegibleList.length);
                 console.log(`ALLOWANCE Time: ${Date.now() - start}ms`);
 
+                //here i need to processEmployee
+
+                processWinner(elegibleList,referenceDate, oRequest.simulationMode, sPayCompCode);
             }
         } else {
             executionLogHandler.createExecutionLogSingleEntry(null, oRequest.referenceDate, sExecutionID, oRequest.simulationMode, [{ message: "No Employees were found for selected filter criteria" }]);
         }
     };
 
+
+    processWinner = async (winners, referenceDate, simulationMode, payCompCode)  => {
+        for (const oEmployee of winners) {
+            // Assuming iAmount is being calculated or retrieved from somewhere
+            const iAmount = parseFloat(oEmployee.amount);  // Replace with actual logic to calculate amount
+            const aPayComponents = await payComponentRules._getEmployeePayComponents(oEmployee.empJob, referenceDate, false, payCompCode);
+
+            const updateResult = await sfecIntegration.runSfEcUpdate(oEmployee, iAmount, referenceDate, aPayComponents, simulationMode, payCompCode);
+            debugger;
+
+            //executeLog
+        }
+    };
+
+
+
+    
+
+
     _determineCustNationality = (sPayCompCode) => {
-        return sPayCompCode.toLowerCase() === "3125" ? "NonNat" : "Nat";        
+        return sPayCompCode.toLowerCase() === "3125" ? "NonNat" : "Nat";
     };
 
     _getReferenceDate = (sDate) => {

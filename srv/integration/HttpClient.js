@@ -13,8 +13,8 @@ class HttpClient {
     }
 
     //MIGUEL
-    upsertEmpPayCompRecurring = async (oPayload) => {
-        return await this._doUpsert(constant.CDS_NAME.EMP_PAY_COMP_RECURRING, oPayload);
+    upsertEmpPayCompNonRecurring = async (oPayload) => {
+        return await this._doUpsert(constant.CDS_NAME.EMP_PAY_COMP_NON_RECURRING, oPayload);
     }
 
     _doUpsert = (sEntityName, oPayload) => {

@@ -38,9 +38,10 @@ class DependentsEligibilityRules {
                 const isValid = await this._validateEligibilityRule(oDependent, oQueryObj.oRule, oEligbRule[0], sReferenceDate);
                 aResults.push(isValid);
             }
-    
+            
+            //MIGUEL TESTE HERE
+
             // Check if all results are `true`
-            //TESTE HERE
             //return aResults.every(Boolean);
 
             return true;

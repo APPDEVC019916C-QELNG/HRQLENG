@@ -74,18 +74,20 @@ class EmployeeJobHandler {
 
 
                 const oChildrenAmount = await this.dependentsHandler.processChildDependent(employee, children, referenceDate, custNat);
-                const oSpouseAmount = await this.dependentsHandler.processSpouseDependent(employee, spouse, referenceDate, custNat);
+                
+                //MIGUEL, test with andre
+                //const oSpouseAmount = await this.dependentsHandler.processSpouseDependent(employee, spouse, referenceDate, custNat);
 
             
                 
-                debugger;
+
+                details.amount = this.sumStrings(oChildrenAmount,details.amount);
 
                 //const totalDependentAmount = await this.dependentsHandler.processDependentDetails(employee, lDependentsDetails, referenceDate, custNat, details);
 
                 //details.emplyeeAount = totalDependentAmount;
 
-                //eligibleDetailsList.push(details);
-
+                eligibleDetailsList.push(details);
 
             }
 
@@ -95,6 +97,16 @@ class EmployeeJobHandler {
         return eligibleDetailsList;
 
     }
+
+        //MIGUEL Move to utils
+    sumStrings = (str1, str2) => {
+        // Convert strings to numbers
+        const num1 = parseFloat(str1);
+        const num2 = parseFloat(str2);
+    
+        // Calculate the sum and convert it back to a string
+        return (num1 + num2).toString();
+    };
 
     processEmployee = async (employee, referenceDate, custNat) => {
 

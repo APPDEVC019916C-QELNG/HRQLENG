@@ -37,7 +37,6 @@ module.exports = Object.freeze({
         },
         NAT: "Nat",
         NON_NAT: "NonNat",
-        PAY_COMPONENT: 2036,
         CURRENCY_CODE: "QAR",
         CUST_TYPE: {
             GROUP: "50015712",
@@ -73,12 +72,12 @@ module.exports = Object.freeze({
         SCENARIO_3_1: "Updated on SFF - Employee Pay Components value with different calculated Amount with valid startDate equal to Reference Date",
         SCENARIO_3_2: "Updated on SFF - Employee Pay Components value with different calculated Amount with no valid startDate equal to Reference Date",
         SCENARIO_4_1: "Updated on SFF - Employee has no Pay Component but has Compensation Portlet with valid startDate equal to Reference Date",
-        SCENARIO_4_2: "Updated on SFF - Employee has no Pay Component and no Compensation Portlet with valid startDate equal to Reference Date",
+        SCENARIO_4: "Updated on SFF - Employee has no Pay Component and no Compensation Portlet with valid startDate equal to Reference Date",
         SCENARIO_2_SIMULATION: "Employee Pay Components value with same calculated Amount but Reference Date is NOT valid and needs to created",
         SCENARIO_3_1_SIMULATION: "Employee Pay Components value with different calculated Amount with valid startDate equal to Reference Date",
         SCENARIO_3_2_SIMULATION: "Employee Pay Components value with different calculated Amount with no valid startDate equal to Reference Date",
         SCENARIO_4_1_SIMULATION: "Employee has no Pay Component but has Compensation Portlet with valid startDate equal to Reference Date",
-        SCENARIO_4_2_SIMULATION: "Employee has no Pay Component and no Compensation Portlet with valid startDate equal to Reference Date",
+        SCENARIO_4_2: "Employee has no Pay Component and no Compensation Portlet with valid startDate equal to Reference Date",
         ERROR: "There was an error executing the UPSERT on SF EC"
     }
 });

@@ -49,14 +49,6 @@ class DependentsHandler {
 
     };
 
-    processWinner = async () => {
-
-    }
-
-
-
-
-
 
     processChildDependent = async (employee, children, referenceDate, custNat) => {
         let totalAmount = 0;
