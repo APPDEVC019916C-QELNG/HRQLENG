@@ -109,13 +109,13 @@ class SF_EC_Integration {
     }
 
     _validateAmount = (aRecurringPayComponents, iAmount, iUnits, iValue) => {
-        return aRecurringPayComponents.some(oComp => 
-            oComp.paycompvalue !== iAmount || 
-            oComp.numberOfUnits !== iUnits || 
+        return aRecurringPayComponents.some(oComp =>
+            oComp.paycompvalue !== iAmount ||
+            oComp.numberOfUnits !== iUnits ||
             oComp.value !== iValue
         );
     }
-    
+
 
     _validateRefDateBetween = (aRecurringPayComponents, sReferenceDate) => {
         const refDate = new Date(sReferenceDate);
@@ -242,14 +242,20 @@ class SF_EC_Integration {
         oReturnComponent["userId"] = oComponent.userId;
         oReturnComponent["payComponentCode"] = sPayComponent ? sPayComponent.toString() : oComponent.payComponent;
         oReturnComponent["value"] = iAmount;
-       // oReturnComponent["customString1 "] = "HMC Pmts 2025" //“HMC Pmts –YEAR” (YEAR should be the “Reference Year”);
+        // oReturnComponent["customString1 "] = "HMC Pmts 2025" //“HMC Pmts –YEAR” (YEAR should be the “Reference Year”);
         oReturnComponent["numberOfUnits"] = "2"; //need to calculate this, forgot
-       // oReturnComponent["unitOfMeasure "] = "Persons";
-        oReturnComponent["payDate"] =`/Date(${new Date("2025-01-01").getTime()})/` //1st January of the “Reference Year”
+        // oReturnComponent["unitOfMeasure "] = "Persons";
+        oReturnComponent["payDate"] = `/Date(${new Date("2025-01-01").getTime()})/` //1st January of the “Reference Year”
         oReturnComponent["currencyCode"] = sCurrencyCode ? sCurrencyCode : oComponent.currencyCode;
-        oReturnComponent["sequenceNumber"] = new Date().toString(); //Timestamp of execution (dd_mm_yyyy_hh_mm_ss)
+        oReturnComponent["sequenceNumber"] = this._newTimeStamp() //Timestamp of execution (dd_mm_yyyy_hh_mm_ss)
 
         return oReturnComponent;
+    }
+
+    _newTimeStamp = () => {
+        let datenow = new Date();
+
+        return datenow.toISOString().replace("T", " ").substring(0, 19);
     }
 }
 

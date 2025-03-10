@@ -119,7 +119,7 @@ module.exports = cds.service.impl(async function () {
 
                 //here i need to processEmployee
 
-                processWinner(elegibleList,referenceDate, oRequest.simulationMode, sPayCompCode);
+                processWinner(elegibleList,referenceDate, oRequest.simulationMode, sPayCompCode, sExecutionID);
             }
         } else {
             executionLogHandler.createExecutionLogSingleEntry(null, oRequest.referenceDate, sExecutionID, oRequest.simulationMode, [{ message: "No Employees were found for selected filter criteria" }]);
@@ -127,13 +127,17 @@ module.exports = cds.service.impl(async function () {
     };
 
 
-    processWinner = async (winners, referenceDate, simulationMode, payCompCode)  => {
+    processWinner = async (winners, referenceDate, simulationMode, payCompCode, sExecutionID)  => {
         for (const oEmployee of winners) {
             // Assuming iAmount is being calculated or retrieved from somewhere
             const iAmount = parseFloat(oEmployee.amount);  // Replace with actual logic to calculate amount
             const aPayComponents = await payComponentRules._getEmployeePayComponents(oEmployee.empJob, referenceDate, false, payCompCode);
 
             const updateResult = await sfecIntegration.runSfEcUpdate(oEmployee, iAmount, referenceDate, aPayComponents, simulationMode, payCompCode);
+
+            await executionLogHandler.createExecutionLogSingleEntry(oEmployee.empJob, referenceDate, sExecutionID, simulationMode, [{ message: `No Dependents are eligible for Employee ${oEmployee.empJob.userId}, date ${referenceDate}` }], true);
+
+            console.log("----- end ---- ")
             debugger;
 
             //executeLog
