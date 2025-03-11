@@ -12,7 +12,7 @@ class ChildrenPayment {
         this.dependentEligibilityRules = new DependentEligibilityRules(service, bottleNeck);
     }
 
-    isApplicable =  async (details, referenceDate, custNational) => {
+    isEligible =  async (details, referenceDate, custNational) => {
 
         const age = this.calculateAge(details.cust_DateOfBirth, referenceDate);
 
@@ -85,7 +85,7 @@ class ChildrenPayment {
         }
     }
     
-     evaluateNonNationalEligibility  = async (spouse, referenceDate, custNational, age) =>{
+     evaluateNonNationalEligibility  = async (details, referenceDate, custNational, age) =>{
         if (age < 19) {
             return true;
         }
@@ -100,7 +100,7 @@ class ChildrenPayment {
         
 
         if(rules && rules.length > 0){
-            const result = await this.dependentEligibilityRules.isEligible(spouse, referenceDate, rules);
+            const result = await this.dependentEligibilityRules.isEligible(details, referenceDate, rules);
 
             if(!result) return false;
             return result;
@@ -122,12 +122,6 @@ class ChildrenPayment {
         }    
     }
 
-
-     isRuleEligible = (entity, rule, referenceDate) => {
-
-        //eligibilityRules.isEligible();
-
-    };
     
     
     

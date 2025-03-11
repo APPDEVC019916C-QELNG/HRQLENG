@@ -13,16 +13,36 @@ class SpousePayment {
 
     }
 
-    isApplicable = async (details, referenceDate, custNational) => {
+    isEligible = async (details, referenceDate, custNational, employeeID) => {
 
-        const spouseNationality = this.checkSpouseNationality(details.cust_Nationality);
+        if (custNational === "Nat") {
+            const spouseRules = await this.cruder.read(constant.CDS_NAME.SPOUSE_ELIGIBILITY_RULE, [['payComponent', '=', "3126"], ['custNat', '=', custNational]], 'AND');
 
-        const rules = await this.cruder.read(constant.CDS_NAME.SPOUSE_ELIGIBILITY_RULE, [['payComponent', '=', "3126"], ['custNat', '=', custNational]], 'AND');
-        //const perPersonal = await this.fetchPersonalForEmployee(employeeID);
-        const result = await this.dependentEligibilityRules.isEligible(details, referenceDate, rules);
+            for (let rule of spouseRules) {
+                let isValid = true;
+                
+                if (rule.checkGender) {
+                    // Get the gender of the employee for the spouse
+                    //let perPersonal = genderService.getPerPersonalForEmployeeId(employeeID);
+                    let perPersonal = await this.fetchPersonalForEmployee(employeeID);
 
-        debugger;
+                    if (!perPersonal) {
+                        return null;
+                    }
+
+                    isValid = await this.dependentEligibilityRules.isEligible(details, referenceDate, rules);
+                    
+                    if (!isValid) {
+                        return null;
+                    }
+                }
+            }
+            return details;
+        }
+        // Non-national spouse has no eligibility
+        return details;
     }
+    
 
     fetchPersonalForEmployee = async (userID) => {
         return await this.st_perPerson.run(SELECT.one.from(constant.CDS_NAME.PER_PERSONAL).where({ "personIdExternal": userID }));

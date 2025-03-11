@@ -48,20 +48,17 @@ class AmountCalculatorHandler {
      * @param {Object} spouse - The spouse details.
      * @param {Date} referenceDate - The reference date for payment calculation.
      * @param {string} custNat - The nationality of the customer.
-     * @param {Object} details - The eligible employee details.
      * @return {number} The calculated spouse payment amount.
      */
-    calculateEmployeeSpousePayment = async (empJob, spouse, referenceDate, custNat, details) => {
-        const spouseRule = getCustHealthCardRule(
-            spouse, referenceDate, custNat, "spouse_nat", empJob.userId
+    calculateEmployeeSpousePayment = async (empJob, referenceDate, custNat, ) => {
+        const spouseRule = await this.getCustHealthCardRule(
+            empJob.userId, referenceDate, custNat, "spouse_nat"
         );
 
-        if (spouseRule && employeeSpousePaymentApplicable.isApplicable(spouse, referenceDate, spouseRule)) {
-            const spouseAmount = employeeSpousePaymentApplicable.getCustAmount(spouseRule);
-            if (details) {
-                details.addAmountForDep(spouse, spouseAmount);
-            }
-            return spouseAmount;
+        if (spouseRule && this.payment.isApplicable(spouseRule.cust_Frequency, referenceDate, spouseRule)) {
+            const spouseAmount = spouseRule.cust_Amount;
+     
+            return { empJob, amount, additionalData: {} };
         }
         return 0;
     }
@@ -73,10 +70,9 @@ class AmountCalculatorHandler {
      * @param {Object} child - The child details.
      * @param {Date} referenceDate - The reference date for payment calculation.
      * @param {string} custNat - The nationality of the customer.
-     * @param {Object} details - The eligible employee details.
      * @return {number} The calculated child payment amount.
      */
-    calculateEmployeeChildPayment = async (empJob, child, referenceDate, custNat, details) => {
+    calculateEmployeeChildPayment = async (empJob, child, referenceDate, custNat) => {
 
   
         const childRule = await this.getCustHealthCardRule(
@@ -86,10 +82,7 @@ class AmountCalculatorHandler {
 
         if (childRule && this.payment.isApplicable(childRule.cust_Frequency, childRule.effectiveStartDate , referenceDate)) {
             const childAmount = childRule.cust_Amount;
-            if (details) {
-                //Miguel check this
-              //  details.addAmountForDep(child, childAmount);
-            }
+
             return childAmount;
         }
         return 0;

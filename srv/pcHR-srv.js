@@ -80,7 +80,7 @@ module.exports = cds.service.impl(async function () {
 
         _executeProcess(req.data, sExecutionID);
 
-        return `School Transportation Allowance Generation Executed with ID: ${sExecutionID}`;
+        return `Health Card Allowance Generation Executed with ID: ${sExecutionID}`;
     });
 
     _executeProcess = async (oRequest, sExecutionID) => {
@@ -120,10 +120,10 @@ module.exports = cds.service.impl(async function () {
                 //here i need to processEmployee
 
                 processWinner(elegibleList,referenceDate, oRequest.simulationMode, sPayCompCode, sExecutionID);
+            }else {
+                executionLogHandler.createExecutionLogSingleEntry(null, oRequest.referenceDate, sExecutionID, oRequest.simulationMode, [{ message: "No Employees were found for selected filter criteria" }],null, null, false, null, sPayCompCode);
             }
-        } else {
-            executionLogHandler.createExecutionLogSingleEntry(null, oRequest.referenceDate, sExecutionID, oRequest.simulationMode, [{ message: "No Employees were found for selected filter criteria" }],null, null, false, null, sPayCompCode);
-        }
+        } 
     };
 
 
@@ -131,16 +131,18 @@ module.exports = cds.service.impl(async function () {
         for (const oEmployee of winners) {
             // Assuming iAmount is being calculated or retrieved from somewhere
             const iAmount = parseFloat(oEmployee.amount);  // Replace with actual logic to calculate amount
+
+            if(iAmount === 0){
+                await payComponentRules.checkEmployeePayComponents(employee, sReferenceDate);
+                return;
+            }
+
             const aPayComponents = await payComponentRules._getEmployeePayComponents(oEmployee.empJob, referenceDate, false, payCompCode);
 
-            const updateResult = await sfecIntegration.runSfEcUpdate(oEmployee, iAmount, referenceDate, aPayComponents, simulationMode, payCompCode);
-
-            await executionLogHandler.createExecutionLogSingleEntry(oEmployee.empJob, referenceDate, sExecutionID, simulationMode, [{ message: `No Dependents are eligible for Employee ${oEmployee.empJob.userId}, date ${referenceDate}` }], true, iAmount, null, payCompCode);
-
+            await sfecIntegration.runSfEcUpdate(oEmployee, iAmount, referenceDate, aPayComponents, simulationMode, payCompCode);
+            await executionLogHandler.createExecutionLogSingleEntry(oEmployee.empJob, referenceDate, sExecutionID, simulationMode, [{ message: `No Dependents are eligible for Employee ${oEmployee.empJob.userId}, date ${referenceDate}` }], true, iAmount, null, null, payCompCode);
             console.log("----- end ---- ")
-            debugger;
 
-            //executeLog
         }
     };
 

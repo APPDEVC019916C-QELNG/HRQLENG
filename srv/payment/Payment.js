@@ -13,6 +13,7 @@ class Payment {
 
     }
 
+    //MIGUEL: Check with ferreirinha
     getHealthCardRules = async (userId, referenceDate, ecField, custEligibility, gender) => {
 
         const gender1 = this._getGender(gender, 1);

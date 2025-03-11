@@ -28,6 +28,10 @@ class SF_EC_Integration {
         }
     }
 
+    deletePayComponents = async () => {
+
+    }
+
     _runScenario1 = () => {
         return {
             bToUpdate: false,

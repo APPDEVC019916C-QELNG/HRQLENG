@@ -76,8 +76,7 @@ class EmployeeJobHandler {
 
                 const childrenResult  = await this.dependentsHandler.processChildDependent(employee, children, referenceDate, custNat);
                 
-                //MIGUEL, test with andre
-                //const oSpouseAmount = await this.dependentsHandler.processSpouseDependent(employee, spouse, referenceDate, custNat);
+                const spouseResult = await this.dependentsHandler.processSpouseDependent(employee, spouse, referenceDate, custNat);
 
             
 

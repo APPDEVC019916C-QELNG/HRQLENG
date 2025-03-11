@@ -37,9 +37,10 @@ class EligibilityRules {
                         resolve(employee);
                     } else {
                         if (bSimulationMode) {
-                            await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, this.aErrorMessages.filter(msg => msg.userId == employee.userId), false);
+                            await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, this.aErrorMessages.filter(msg => msg.userId == employee.userId), false,null,null,null,sPayCompCode);
                         } else {
-                            await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, [...this.aErrorMessages.filter(msg => msg.userId == employee.userId)], false, null, false, ""); //MIGUELs
+                            const oResult = await payComponentRules.checkEmployeePayComponents(employee, sReferenceDate);
+                            await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, [...this.aErrorMessages.filter(msg => msg.userId == employee.userId), ...oResult.message ? [{message: oResult.message}] : [] ], false,null,null,null,sPayCompCode); //MIGUEL
                         }
                         resolve(null);
                     }
@@ -82,7 +83,7 @@ class EligibilityRules {
                 oRule: oRule
             });
         })
-    }
+    };
 
     _withPickList = (oEmployee, oRule, sReferenceDate, oEligbRule) => {
         return new Promise(async resolve => {
@@ -90,26 +91,30 @@ class EligibilityRules {
                 if (oPickRes) {
                     let bValid = this.validator.validateWithOperator(oEligbRule.cust_Operator, oEligbRule.cust_Values, oPickRes.externalCode, oRule.isDate, sReferenceDate);
                     if (!bValid) {
-                        this.aErrorMessages.push({ userId: oEmployee.userId, message: `Cust School Transportation Eligibility not valid for userId ${oEmployee.userId}, date ${sReferenceDate}, field ${oRule.ecField}, with value ${oPickRes.externalCode}, operator ${oEligbRule.cust_Operator}, cust values ${oEligbRule.cust_Values}` });
+                        this.aErrorMessages.push({ userId: oEmployee.userId, message: `Health cards Eligibility not valid for userId ${oEmployee.userId}, date ${sReferenceDate}, field ${oRule.ecField}, with value ${oPickRes.externalCode}, operator ${oEligbRule.cust_Operator}, cust values ${oEligbRule.cust_Values}` });
                     }
                     resolve(bValid);
                 } else {
-                    this.aErrorMessages.push({ userId: oEmployee.userId, message: `No Cust School Transportation Eligibility picklistOption found for userId ${oEmployee.userId}, date ${sReferenceDate}, field ${oRule.ecField}, custElig ${oRule.custEligibility}, picklistopt  ${oEmployee[oRule.targetEntityProp]}` });
+                    this.aErrorMessages.push({ userId: oEmployee.userId, message: `No Health cards Eligibility picklistOption found for userId ${oEmployee.userId}, date ${sReferenceDate}, field ${oRule.ecField}, custElig ${oRule.custEligibility}, picklistopt  ${oEmployee[oRule.targetEntityProp]}` });
                     resolve(false);
                 }
             });
         });
-    }
+    };
 
     _withNoPickList = (oEmployee, oRule, sReferenceDate, oEligbRule) => {
         return new Promise(resolve => {
             let bValid = this.validator.validateWithOperator(oEligbRule.cust_Operator, oEligbRule.cust_Values, oEmployee[oRule.targetEntityProp], oRule.isDate, sReferenceDate);
             if (!bValid) {
-                this.aErrorMessages.push({ userId: oEmployee.userId, message: `Cust School Transportation Eligibility not valid for userId ${oEmployee.userId}, date ${sReferenceDate}, field ${oRule.ecField}, with value ${oEmployee[oRule.targetEntityProp]}, operator ${oEligbRule.cust_Operator}, cust values ${oEligbRule.cust_Values}` });
+                this.aErrorMessages.push({ userId: oEmployee.userId, message: `Health cards not valid for userId ${oEmployee.userId}, date ${sReferenceDate}, field ${oRule.ecField}, with value ${oEmployee[oRule.targetEntityProp]}, operator ${oEligbRule.cust_Operator}, cust values ${oEligbRule.cust_Values}` });
             }
             resolve(bValid);
         })
-    }
+    };
+
+
+
+
 
 
 }

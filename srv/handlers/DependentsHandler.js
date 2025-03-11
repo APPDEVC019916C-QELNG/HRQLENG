@@ -55,10 +55,10 @@ class DependentsHandler {
         let count = 0; // Counter for the number of times an amount was added
     
         for (const child of children) {
-            if (await this.childrenPayment.isApplicable(child, referenceDate, custNat)) {
+            if (await this.childrenPayment.isEligible(child, referenceDate, custNat)) {
                 let amount = await this.amountCalculatorHandler.calculateEmployeeChildPayment(employee, child, referenceDate, custNat, child);
                 totalAmount += parseFloat(amount) || 0; // Ensures numeric addition
-                count++; // Increment counter each time an amount is added
+                if (amount > 0)   count++;
             }
         }
         const totalAmountString = totalAmount.toString();
@@ -74,10 +74,10 @@ class DependentsHandler {
         let count = 0; // Counter for the number of times an amount was added
     
         for (const spouse of spouses) {
-            if (await this.spousePayment.isApplicable(spouse, referenceDate, custNat)) {
-                let amount = await this.amountCalculatorHandler.calculateEmployeeChildPayment(employee, spouse, referenceDate, custNat, spouse);
+            if (await this.spousePayment.isEligible(spouse, referenceDate, custNat)) {
+                let amount = await this.amountCalculatorHandler.calculateEmployeeSpousePayment(employee, referenceDate, custNat);
                 totalAmount += parseFloat(amount) || 0; // Ensures numeric addition
-                count++; // Increment counter each time an amount is added
+                if (amount > 0)   count++;
 
             }
         }

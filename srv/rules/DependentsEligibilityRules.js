@@ -30,7 +30,7 @@ class DependentsEligibilityRules {
                 );
     
                 if (!oEligbRule || oEligbRule.length === 0) {
-                    console.log(`No Cust School Transportation Eligibility found for Dependent ${oDependent.cust_Dependents_externalCode}, userId ${oDependent.externalCode}, date ${sReferenceDate}, field ${oQueryObj.oRule.ecField}, custElig ${oQueryObj.oRule.custEligibility}`);
+                    console.log(`No Health Card Eligibility found for Dependent ${oDependent.cust_Dependents_externalCode}, userId ${oDependent.externalCode}, date ${sReferenceDate}, field ${oQueryObj.oRule.ecField}, custElig ${oQueryObj.oRule.custEligibility}`);
                     aResults.push(false);
                     continue;
                 }
@@ -41,10 +41,9 @@ class DependentsEligibilityRules {
             
             //MIGUEL TESTE HERE
 
-            // Check if all results are `true`
-            //return aResults.every(Boolean);
+            return aResults.every(Boolean);
 
-            return true;
+            //return true;
 
     };
     

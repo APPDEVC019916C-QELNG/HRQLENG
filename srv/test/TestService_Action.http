@@ -33,6 +33,7 @@ Content-Type: application/json
       "00600396",
       "00001842",
       "00013515",
+      "00002087",
       "28"
       ],
     "foJobs": [],
@@ -58,10 +59,7 @@ Content-Type: application/json
 
 {
     "userIds": [
-    "00013515",
-    "00002087",
-    "00013515",
-    "28"
+    "00002087"
     ],
     "foJobs": [],
     "departments": [],
@@ -74,7 +72,7 @@ Content-Type: application/json
     "payComponent": {
       "ID": "25611292-c3de-4f47-a109-b4f5bc1026dc",
       "name": "National Health Card",
-     "code": "3125"
+     "code": "3126"
   },
     "custEmployeeGroups": []
 }
