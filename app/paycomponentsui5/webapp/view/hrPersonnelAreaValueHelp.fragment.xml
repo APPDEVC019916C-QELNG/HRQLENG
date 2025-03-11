@@ -2,6 +2,8 @@
 	xmlns="sap.m"
 	xmlns:core="sap.ui.core">
 	<SelectDialog
+		search=".onSearch"
+		liveChange=".onSearch"
         id="hrPersonnelAreaList"
 		noDataText="{i18n>noData}"
 		title="{i18n>job}"
@@ -9,7 +11,7 @@
 		showClearButton="true"
         multiSelect="true"
         rememberSelections="true"
-		items="{path:'pcModel>/qa_com_qelng_pc_HRPersonnelArea', parameters:{$select:'effectiveStartDate,mdfSystemEffectiveEndDate'}}">
+		items="{path:'pcModel>/HRPersonnelArea', parameters:{$select:'effectiveStartDate,mdfSystemEffectiveEndDate'}}">
 		<StandardListItem id="hrPersonnelAreaListItem"
 			title="{pcModel>externalName} ({pcModel>externalCode})"
 			type="Active" />

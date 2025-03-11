@@ -16,7 +16,7 @@ sap.ui.define([
 		onSearch: function () {
 			let oBinding = this.byId("resultPerEmpTable").getBinding("items"),
 				inputValue = this.byId("searchInput").getValue(),
-				oFilter = new Filter("userId", FilterOperator.Contains, inputValue);
+				oFilter = new Filter("employeeID", FilterOperator.Contains, inputValue);
 			if (inputValue == "") {
 				oBinding.filter([]);
 			}
@@ -33,13 +33,13 @@ sap.ui.define([
 
 			aCols.push({
 				label: this.getText("IDExecution"),
-				property: 'executionId',
+				property: 'executionID',
 				type: EdmType.Integer
 			});
 
 			aCols.push({
 				label: this.getText("timeStamp"),
-				property: 'timeStamp',
+				property: 'createdAt',
 				type: EdmType.DateTime
 			});
 
@@ -53,7 +53,7 @@ sap.ui.define([
 
 			aCols.push({
 				label: this.getText("userID"),
-				property: 'userId',
+				property: 'employeeID',
 				type: EdmType.String
 			});
 
@@ -108,7 +108,7 @@ sap.ui.define([
 			aCols.push({
 				label: this.getText("referenceDate"),
 				property: 'referenceDate',
-				type: EdmType.Date
+				type: EdmType.String
 			});
 
 			aCols.push({
@@ -119,7 +119,7 @@ sap.ui.define([
 
 			aCols.push({
 				label: this.getText("toBeUpdated"),
-				property: 'updated',
+				property: 'toBeUpdated',
 				type: EdmType.Boolean
 			});
 
@@ -134,8 +134,8 @@ sap.ui.define([
 
 		onDownload: function (oEvent) {
 			let aCols, oBinding, oSettings, oSheet, flag = true;
-			let executionId = oEvent.getSource().getBindingContext("ExecutionLogServiceModel").getProperty("executionId");
-			oBinding = this.byId("resultPerEmpTable").getBinding("items").filter(new Filter("executionId", FilterOperator.EQ, executionId));
+			let executionId = oEvent.getSource().getBindingContext("pcModel").getProperty("executionID");
+			oBinding = this.byId("resultPerEmpTable").getBinding("items").filter(new Filter("executionID", FilterOperator.EQ, executionId));
 			aCols = this.createColumnConfig();
 
 			oSettings = {
@@ -169,6 +169,9 @@ sap.ui.define([
 			});
 
 			return oDateFormat.format(new Date(dateTime))
+		},
+		onRefreshPress: function () {
+			this.getModel("pcModel").refresh();
 		},
 		dateTimeFormat: function (dateTime) {
 			let oDateFormat = sap.ui.core.format.DateFormat.getDateInstance({

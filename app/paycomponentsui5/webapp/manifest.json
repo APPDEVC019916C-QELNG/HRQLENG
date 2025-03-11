@@ -30,17 +30,6 @@
           "annotations": [],
           "odataVersion": "4.0"
         }
-      },
-      "ExecutionLogService": {
-        "uri": "/odata/v4/qa.com.qelng.pc.srv.ExecutionLogService/",
-        "type": "OData",
-        "settings": {
-          "synchronizationMode": "None",
-          "operationMode": "Server",
-          "autoExpandSelect": true,
-          "annotations": [],
-          "odataVersion": "4.0"
-        }
       }
     }
   },
@@ -82,16 +71,6 @@
       },
       "pcModel": {
         "dataSource": "proxyService",
-        "preload": true,
-        "settings": {
-          "synchronizationMode": "None",
-          "operationMode": "Server",
-          "autoExpandSelect": true,
-          "earlyRequests": true
-        }
-      },
-      "ExecutionLogServiceModel": {
-        "dataSource": "ExecutionLogService",
         "preload": true,
         "settings": {
           "synchronizationMode": "None",

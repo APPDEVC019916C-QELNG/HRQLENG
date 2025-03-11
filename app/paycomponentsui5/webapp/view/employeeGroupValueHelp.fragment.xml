@@ -2,6 +2,8 @@
 	xmlns="sap.m"
 	xmlns:core="sap.ui.core">
 	<SelectDialog
+		search=".onSearch"
+		liveChange=".onSearch"
         id="employeeGroupList"
 		noDataText="{i18n>noData}"
 		title="{i18n>job}"
@@ -9,7 +11,7 @@
 		showClearButton="true"
         multiSelect="true"
         rememberSelections="true"
-		items="{path:'pcModel>/qa_com_qelng_pc_CustEmployeeGroup', parameters:{$select:'effectiveStartDate,mdfSystemEffectiveEndDate'}}">
+		items="{path:'pcModel>/CustEmployeeGroup', parameters:{$select:'effectiveStartDate,mdfSystemEffectiveEndDate'}}">
 		<StandardListItem id="employeeGroupListItem"
 			title="{pcModel>externalName} ({pcModel>externalCode})"
 			type="Active" />

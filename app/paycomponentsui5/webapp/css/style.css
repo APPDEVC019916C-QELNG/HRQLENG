@@ -1,1 +1,31 @@
-/* Enter your custom styles here */
+.sapMLabel {
+    color: #44B388;
+}
+
+.sapUiFormTitleH4 {
+    color: #155199!important;
+}
+
+span.sapMBtnInner.sapMBtnEmphasized {
+    background-color: #fff;
+    border-color: #1d2d3e;
+    color: #155199;
+}
+
+.sapUiSizeCompact .sapMPageHeader .sapMIBar {
+    height: 4rem;
+}
+
+.sapMImg {
+    height: 4rem;
+}
+
+.sapMFlexBox {
+    margin-block-start: 2%;
+    display: flex;
+}
+
+.sapMIBar-CTX .sapMTitle {
+    color: #155199;
+    text-shadow: none;
+}

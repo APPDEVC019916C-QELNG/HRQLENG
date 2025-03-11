@@ -4,12 +4,19 @@
     xmlns:f="sap.ui.layout.form"
     xmlns:core="sap.ui.core">
     <Page id="page" title="{i18n>appTitle}" titleAlignment="Center">
+        <customHeader>
+            <OverflowToolbar id="overflowToolbarTop">
+                <ToolbarSpacer id="spacerfront"/>
+                <Image id="logo" src="model/logo.png"/>
+                <Title id="hcTitle" text="{i18n>formTitle}"/>
+                <ToolbarSpacer id="spacerback"/>
+            </OverflowToolbar>
+        </customHeader>
         <content>
             <FlexBox id="flexBoxId" alignItems="Center" justifyContent="Center" direction="Column">
                 <f:SimpleForm id="healthCardForm"
                     editable="false"
                     layout="ResponsiveGridLayout"
-                    title="{i18n>formTitle}"
                     labelSpanXL="5"
                     labelSpanL="5"
                     labelSpanM="5"
@@ -27,7 +34,7 @@
                         <core:Title id="pleaseSelectId" text="{i18n>pleaseSelect}" />
                         
                         <Label id="payComponentLabelId" required="true" text="{i18n>payComponent}" />
-                        <ComboBox items="{path: 'pcModel>/PayComponent'}" id="pcSelect" selectedKey="{payComponent}" placeholder="{i18n>noSelection}">
+                        <ComboBox items="{path: 'pcModel>/PayComponents'}" id="pcSelect" selectedKey="{payComponent}" placeholder="{i18n>noSelection}">
                             <items>
                                 <core:Item id="pcItem" key="{pcModel>ID}_#{pcModel>name}_#{pcModel>code}" text="{pcModel>name} ({pcModel>code})" />
                             </items>

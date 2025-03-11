@@ -2,6 +2,8 @@
 	xmlns="sap.m"
 	xmlns:core="sap.ui.core">
 	<SelectDialog
+		search=".onSearch"
+		liveChange=".onSearch"
         id="jobList"
 		noDataText="{i18n>noData}"
 		title="{i18n>job}"
@@ -9,9 +11,9 @@
 		showClearButton="true"
         multiSelect="true"
         rememberSelections="true"
-		items="{path:'pcModel>/qa_com_qelng_pc_FoJob', parameters:{$select:'startDate,endDate'}}">
+		items="{path:'pcModel>/FoJob', parameters:{$select:'startDate,endDate'}}">
 		<StandardListItem id="jobListItem"
-			title="{pcModel>custName} ({pcModel>externalCode})"
+			title="{pcModel>cust_name_defaultValue} ({pcModel>externalCode})"
 			type="Active" />
 	</SelectDialog>
 </core:FragmentDefinition>

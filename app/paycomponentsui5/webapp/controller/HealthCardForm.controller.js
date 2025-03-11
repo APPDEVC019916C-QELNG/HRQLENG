@@ -149,7 +149,6 @@ sap.ui.define([
                         controller: this
                     }).then(function (oDialog) {
                         oView.addDependent(oDialog);
-                        oDialog._searchField.setVisible(false);
                         return oDialog;
                     }.bind(this));
                 }
@@ -175,7 +174,6 @@ sap.ui.define([
                         controller: this
                     }).then(function (oDialog) {
                         oView.addDependent(oDialog);
-                        oDialog._searchField.setVisible(false);
                         return oDialog;
                     }.bind(this));
                 }
@@ -200,7 +198,6 @@ sap.ui.define([
                         controller: this
                     }).then(function (oDialog) {
                         oView.addDependent(oDialog);
-                        oDialog._searchField.setVisible(false);
                         return oDialog;
                     }.bind(this));
                 }
@@ -225,7 +222,6 @@ sap.ui.define([
                         controller: this
                     }).then(function (oDialog) {
                         oView.addDependent(oDialog);
-                        oDialog._searchField.setVisible(false);
                         return oDialog;
                     }.bind(this));
                 }
@@ -250,7 +246,6 @@ sap.ui.define([
                         controller: this
                     }).then(function (oDialog) {
                         oView.addDependent(oDialog);
-                        oDialog._searchField.setVisible(false);
                         return oDialog;
                     }.bind(this));
                 }
@@ -275,7 +270,6 @@ sap.ui.define([
                         controller: this
                     }).then(function (oDialog) {
                         oView.addDependent(oDialog);
-                        oDialog._searchField.setVisible(false);
                         return oDialog;
                     }.bind(this));
                 }
@@ -297,7 +291,7 @@ sap.ui.define([
                     return;
                 }
                 else if (!this.onSubmitCheck()) {
-                    let oAction = this.getModel("pcModel").bindContext("/exectue(...)");
+                    let oAction = this.getModel("pcModel").bindContext("/executeCompHRCalculation(...)");
                     oAction.setParameter("payComponent", this.convertPcToObject(selectedValue.payComponent));
                     oAction.setParameter("referenceYear", parseInt(selectedValue.referenceYear));
                     oAction.setParameter("userIds", this.splitFunction(selectedValue.userId));
@@ -311,8 +305,8 @@ sap.ui.define([
                     oAction.setParameter("simulationMode", selectedValue.simulationMode);
 
                     oAction.execute().then(function () {
-                        MessageBox.success(this.getResourceBundle().getText("dataSent"));
-
+                        let oActionContext = oAction.getBoundContext();
+                        MessageBox.success(oActionContext.getObject().value);
                         this.defaultHealthCardFormBinding();
                     }.bind(this), function (oError) {
                         MessageBox.error(oError.message);
@@ -347,7 +341,7 @@ sap.ui.define([
                         const match = item.match(/(.*) \((\w+)\)$/);
                         return {
                             externalCode: match[2],
-                            custName: match[1]
+                            cust_name_defaultValue: match[1]
                         };
                     });
                     return result;
@@ -362,7 +356,7 @@ sap.ui.define([
                     const result = string.split(',').map(item => {
                         const match = item.match(/(.*) \((\w+)\)$/);
                         return {
-                            custExternalcode: match[2],
+                            externalCode: match[2],
                             name_defaultValue: match[1]
                         };
                     });
@@ -378,7 +372,7 @@ sap.ui.define([
                         const match = item.match(/(.*) \((\w+)\)$/);
                         return {
                             externalCode: match[2],
-                            orgunit: match[1]
+                            name_defaultValue: match[1]
                         };
                     });
                     return result;
@@ -409,7 +403,23 @@ sap.ui.define([
                     return true;
                 }
             },
-
+            onSearch: function (oEvent){
+                let sValue = oEvent.getParameter("value");
+                let idCheck=oEvent.getSource().getId();
+                let value;
+                if(idCheck.includes("orgUnitList") || idCheck.includes("groupList") || idCheck.includes("departmentList")){
+                    value="name_defaultValue";
+                }
+                else if(idCheck.includes("jobList")){
+                    value="cust_name_defaultValue";
+                }
+                else if(idCheck.includes("hrPersonnelAreaList") || idCheck.includes("employeeGroupList")){
+                    value="externalName";
+                }
+                let oFilter = new Filter({path:value, operator:FilterOperator.Contains, value1:sValue, caseSensitive:false});
+                let oBinding = oEvent.getParameter("itemsBinding");
+                oBinding.filter([oFilter]);
+            },
             onSubmitCheck: function () {
                 let pcID = this.byId("pcSelect"), refYearID = this.byId("referenceYearSelect");
                 let sError = false;
@@ -434,7 +444,8 @@ sap.ui.define([
                 return sError;
             },
             onPressExecLogs: function () {
-                this.getRouter().navTo("RouteExecutionLogs")
+                this.getModel("pcModel").refresh();
+                this.getRouter().navTo("RouteExecutionLogs");
             }
         });
     });
