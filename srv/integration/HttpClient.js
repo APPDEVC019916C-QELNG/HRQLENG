@@ -139,8 +139,12 @@ class HttpClient {
                     }
                 }
             } else {
+                try{
                 const response = await sdkHttpRequest.executeHttpRequest(destination, requestOptions, { fetchCsrfToken: false });
                 allRecords = allRecords.concat(response.data.d.results);
+                } catch(error){
+                    debugger;
+                }
             }
 
             resolve(allRecords);

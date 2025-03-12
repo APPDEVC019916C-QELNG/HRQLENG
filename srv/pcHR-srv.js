@@ -120,9 +120,7 @@ module.exports = cds.service.impl(async function () {
                 //console.log("A Processed Allowance length " + elegibleList.length);
                 //console.log(`ALLOWANCE Time: ${Date.now() - start}ms`);
 
-                //here i need to processEmployee
-
-                processWinner(elegibleList,referenceDate, oRequest.simulationMode, sPayCompCode, sExecutionID);
+                //processWinner(elegibleList,referenceDate, oRequest.simulationMode, sPayCompCode, sExecutionID);
             }else {
                 executionLogHandler.createExecutionLogSingleEntry(null, oRequest.referenceDate, sExecutionID, oRequest.simulationMode, [{ message: "No Employees were found for selected filter criteria" }],null, null, false, null, sPayCompCode);
             }

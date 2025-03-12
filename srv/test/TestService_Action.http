@@ -60,12 +60,7 @@ Content-Type: application/json
 
 {
     "userIds": [
-      "00002051",
-      "00006136",
-      "00002070",
-      "00006282",
-      "00001842",
-      "00016818",
+      "00006136"
       ],
     "foJobs": [],
     "departments": [],
@@ -89,7 +84,12 @@ Content-Type: application/json
 
 {
     "userIds": [
-
+      "00000508",
+      "00000845",
+      "00016933",
+      "00002220",
+      "00003585",
+      "00021686"
       ],
     "foJobs": [],
     "departments": [],

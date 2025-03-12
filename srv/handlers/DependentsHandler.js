@@ -21,7 +21,7 @@ class DependentsHandler {
         this.httpClient = new httpClient();
 
         this.childrenPayment = new childrenPayment(service, bottleneck);
-        this.spousePayment = new spousePayment(service, bottleneck, st_perPerson, bottleneck);
+        this.spousePayment = new spousePayment(service, st_perPerson, bottleneck);
 
     
         this.limiter = bottleneck;
@@ -75,7 +75,7 @@ class DependentsHandler {
         let count = 0; // Counter for the number of times an amount was added
     
         for (const spouse of spouses) {
-            if (await this.spousePayment.isEligible(spouse, referenceDate, custNat)) {
+            if (await this.spousePayment.isEligible(spouse, referenceDate, custNat, empId)) {
                 let amount = await this.amountCalculatorHandler.calculateEmployeeSpousePayment(spouse, referenceDate, custNat, empId);
                 totalAmount += parseFloat(amount) || 0; // Ensures numeric addition
                 if (amount > 0)   count++;

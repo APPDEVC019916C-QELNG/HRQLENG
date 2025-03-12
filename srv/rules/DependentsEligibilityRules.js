@@ -19,31 +19,60 @@ class DependentsEligibilityRules {
 
 
     isEligible = async (oDependent, sReferenceDate, aRules) => {
-            // Generate queries in parallel
-            const aQueries = await Promise.all(aRules.map(this._getQuery));
-    
-            // Process eligibility checks with rate limiter
-            const aResults = [];
-            for await (const oQueryObj of aQueries) {
-                const oEligbRule = await this.limiter.schedule(() => 
-                    this.httpClient.getCustEligibility(oQueryObj.sQuery, sReferenceDate)
-                );
-    
-                if (!oEligbRule || oEligbRule.length === 0) {
-                    console.log(`No Health Card Eligibility found for Dependent ${oDependent.cust_Dependents_externalCode}, userId ${oDependent.externalCode}, date ${sReferenceDate}, field ${oQueryObj.oRule.ecField}, custElig ${oQueryObj.oRule.custEligibility}`);
-                    aResults.push(false);
-                    continue;
-                }
-    
-                const isValid = await this._validateEligibilityRule(oDependent, oQueryObj.oRule, oEligbRule[0], sReferenceDate);
-                aResults.push(isValid);
-            }
-            
+        // Generate queries in parallel
+        const aQueries = await Promise.all(aRules.map(this._getQuery));
 
-            return aResults.every(Boolean);
+        // Process eligibility checks with rate limiter
+        const aResults = [];
+        for await (const oQueryObj of aQueries) {
+            const oEligbRule = await this.limiter.schedule(() =>
+                this.httpClient.getCustEligibility(oQueryObj.sQuery, sReferenceDate)
+            );
+
+            if (!oEligbRule || oEligbRule.length === 0) {
+                console.log(`No Health Card Eligibility found for Dependent ${oDependent.cust_Dependents_externalCode}, userId ${oDependent.externalCode}, date ${sReferenceDate}, field ${oQueryObj.oRule.ecField}, custElig ${oQueryObj.oRule.custEligibility}`);
+                aResults.push(false);
+                continue;
+            }
+
+            const isValid = await this._validateEligibilityRule(oDependent, oQueryObj.oRule, oEligbRule[0], sReferenceDate);
+            aResults.push(isValid);
+        }
+
+
+        return aResults.every(Boolean);
 
     };
-    
+
+
+    isEligibleWithGender = async (oDependent, sReferenceDate, aRules) => {
+        // Generate queries in parallel
+        const aQueries = await Promise.all(aRules.map(this._getQuery));
+
+        // Process eligibility checks with rate limiter
+        const aResults = [];
+        for await (const oQueryObj of aQueries) 
+        
+        {
+            const oEligbRule = await this.limiter.schedule(() =>
+                this.httpClient.getCustEligibility(oQueryObj.sQuery, sReferenceDate)
+            );
+
+            if (!oEligbRule || oEligbRule.length === 0) {
+                console.log(`No Health Card Eligibility found for Dependent ${oDependent.cust_Dependents_externalCode}, userId ${oDependent.externalCode}, date ${sReferenceDate}, field ${oQueryObj.oRule.ecField}, custElig ${oQueryObj.oRule.custEligibility}`);
+                aResults.push(false);
+                continue;
+            }
+
+            const isValid = await this._validateEligibilityRule(oDependent, oQueryObj.oRule, oEligbRule[0], sReferenceDate);
+            aResults.push(isValid);
+        }
+
+
+        return aResults.every(Boolean);
+
+    };
+
 
     _getQuery = (oRule) => {
         return new Promise(async resolve => {
@@ -58,21 +87,21 @@ class DependentsEligibilityRules {
         const fieldMap = {
             "qid_expiry date": oEligbRule.cust_Values,
             "employed": oEligbRule.cust_Employed,
-            "maried": oEligbRule.cust_Married
+            "maried": oEligbRule.cust_Married,
         };
-    
+
         const valueToValidate = fieldMap[oEligbRule.cust_ECField] || oEligbRule.cust_ECField;
-    
+
         return this.validator.validateWithOperator(
-            oEligbRule.cust_Operator, 
-            valueToValidate, 
-            oDependent[oRule.targetEntityProp], 
-            oRule.isDate, 
+            oEligbRule.cust_Operator,
+            valueToValidate,
+            oDependent[oRule.targetEntityProp],
+            oRule.isDate,
             sReferenceDate
         );
     };
-    
-    
+
+
 
 
 

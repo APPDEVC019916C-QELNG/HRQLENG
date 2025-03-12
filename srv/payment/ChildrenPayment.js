@@ -28,27 +28,24 @@ class ChildrenPayment {
 
         const rules = await this.cruder.read(constant.CDS_NAME.CHILD_ELIGIBILITY_RULE, [['payComponent', '=',"3126"], ['applicableAgeRange', '=', applicableAgeRange], ['custNat', '=', custNational]], 'AND' );
     
-        for (const rule of rules) {
-            if (!isSimpleRuleEligible(details, rule, referenceDate)) {
-                return false; // Equivalent of Optional.empty()
-            }
-        }
-    
-        return true; 
+        const eligible = await this.dependentEligibilityRules.isEligible(details ,referenceDate, rules );
+        return eligible
     }
     
      validateRulesForNationChildG23Gender = async (details, referenceDate, custNational, applicableAgeRange) => {
         const rules = await this.cruder.read(constant.CDS_NAME.CHILD_ELIGIBILITY_RULE, [['payComponent', '=',"3126"], ['applicableAgeRange', '=', applicableAgeRange], ['custNat', '=', custNational]], 'AND' );
        
         const gender = details.custGender; // Assumed direct property access
+        const isEligible = this.dependentEligibilityRules.isEligible(details ,referenceDate ,rules);
+
+        //miguel to check
+        //for (const rule of rules) {
+        //    if (isGenderMatching(gender, rule) && !isEligible) {
+        //        return false;
+        //    }
+        //}
     
-        for (const rule of rules) {
-            if (isGenderMatching(gender, rule) && !isSimpleRuleEligible(details, rule, referenceDate)) {
-                return false;
-            }
-        }
-    
-        return true;
+        return isEligible;
     }
     
 

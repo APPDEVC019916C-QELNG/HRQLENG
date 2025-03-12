@@ -60,13 +60,22 @@ class EmployeeJobHandler {
         const eligibleDetailsList = [];
     
         for (const employee of eligibleEmployees) {
+            console.log("----START USER -----");
+
+            console.log(`Employee ID: ${employee.userId}`);
+
             const details = await this.processEmployee(employee, referenceDate, custNat);
             console.log(`Employee amount: ${details.amount}`);
+
+            details.count = 1
     
             const dependentList = await this.dependentsHandler.getDependentsList(employee.userId, referenceDate);
     
             if (!dependentList?.length) {
+                details.count = 1
                 eligibleDetailsList.push(details);
+                console.log("TOTAL AMOUNT: " +details.amount);
+                console.log("TOTAL COUNT: " +details.count);
                 continue;
             }
     
@@ -91,9 +100,14 @@ class EmployeeJobHandler {
             // Update details
             details.amount = this.sumStrings(childrenResult.totalAmountString, details.amount);
             details.amount = this.sumStrings(spouseResult.totalAmountString, details.amount);
-            details.count = 1 + childrenResult.count + spouseResult.count;
+            details.count = childrenResult.count + spouseResult.count;
     
             eligibleDetailsList.push(details);
+            console.log("TOTAL AMOUNT: " +details.amount);
+            console.log("TOTAL COUNT: " +details.count);
+
+            console.log("----END USER -----");
+
         }
     
         return eligibleDetailsList;

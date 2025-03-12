@@ -32,7 +32,7 @@ class AmountCalculatorHandler {
             empJob.userId, referenceDate, custNat, "employee"
         );
         
-        console.log("Employee rule name: "+empRule !== undefined ?empRule.externalName :" No Rule / undefined rule");
+      //  console.log("Employee rule name: "+empRule !== undefined ? empRule.externalName :" No Rule / undefined rule");
         
         const bApplicable = await this.payment.isEmployeeApplicable(empJob, referenceDate, empRule);
 
@@ -56,19 +56,19 @@ class AmountCalculatorHandler {
         let spouse_cust_nat;
         let ecField;
         if(custNat === "Nat"){
-            spouse_cust_nat = this._determineECFieldForNationalEmployee(custNat);
+            spouse_cust_nat = this._determineECFieldForNationalEmployee(spouse.cust_Nationality);
             ecField = "national";
         }else{
             const perPersonal = await this.fetchPersonalForEmployee(empId);
             const pickList = await this._getPickList(perPersonal.customString1);
-            spouse_cust_nat = this._determineEligibilityBasedOnSpouseNat(pickList.externalCode);
-            ecField = this.getEligibilityForNonNatEmployee(spouse.cust_Nationality);
+            spouse_cust_nat = this._determineEligibilityBasedOnSpouseNat(spouse.cust_Nationality);
+            ecField = this.getEligibilityForNonNatEmployee(pickList.externalCode);
         }
         const spouseRule = await this.getCustHealthCardRuleSpouse(
            empId, referenceDate, ecField, spouse_cust_nat
         );
         
-        console.log("spouse Rule name: "+ spouseRule !== undefined ? spouseRule.externalName :"no rule");
+      //  console.log("spouse Rule name: "+ spouseRule !== undefined ? spouseRule.externalName :"no rule");
         console.log("spouse Cust_Nationality: "+ spouse_cust_nat);
 
         if (spouseRule && this.payment.isApplicable(spouseRule.cust_Frequency, referenceDate, spouseRule)) {
@@ -94,7 +94,7 @@ class AmountCalculatorHandler {
             child.cust_Nationality
         );
 
-        console.log("Child rule name: "+childRule.externalName);
+       // console.log("Child rule name: " + childRule !== undefined ? childRule.externalName : "no Rule undefined rule");
 
 
         if (childRule && this.payment.isApplicable(childRule.cust_Frequency, childRule.effectiveStartDate , referenceDate)) {
@@ -186,7 +186,7 @@ class AmountCalculatorHandler {
             return "children_gcc";
         }
     
-        return null; // or any default value you need
+        return "children_nongcc";
     }
 
      getEligibilityForNonNatEmployee= (custEligibility) => {
