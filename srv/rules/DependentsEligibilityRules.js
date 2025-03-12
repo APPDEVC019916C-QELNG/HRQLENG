@@ -39,11 +39,8 @@ class DependentsEligibilityRules {
                 aResults.push(isValid);
             }
             
-            //MIGUEL TESTE HERE
 
             return aResults.every(Boolean);
-
-            //return true;
 
     };
     

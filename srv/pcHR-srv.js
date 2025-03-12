@@ -84,6 +84,8 @@ module.exports = cds.service.impl(async function () {
     });
 
     _executeProcess = async (oRequest, sExecutionID) => {
+        console.log("---- test start ----")
+
         // Get Employee Data from UI Filter Criteria //
         const sQuery = await employeeJobHandler.getFilteredEmployeeListQuery(oRequest);
 
@@ -101,7 +103,6 @@ module.exports = cds.service.impl(async function () {
 
         if (aFilteredEmployeeList && aFilteredEmployeeList.length) {
 
-            oRequest.getComponent
 
             const aEligibleEmployeeRes = await eligibilityRules.getEligibleEmployeeList(aFilteredEmployeeList, referenceDate, sExecutionID, sPayCompCode, oRequest.simulationMode);
 
@@ -110,12 +111,14 @@ module.exports = cds.service.impl(async function () {
 
             if (aEligibleEmployeeRes && aEligibleEmployeeRes.length) {
 
+                //Miguel does this make sense ?
                 const custNat = _determineCustNationality(sPayCompCode);
 
                 const elegibleList = await employeeJobHandler.processEligibleEmployees(aEligibleEmployeeRes, referenceDate, custNat);
 
-                console.log("A Processed Allowance length " + elegibleList.length);
-                console.log(`ALLOWANCE Time: ${Date.now() - start}ms`);
+                //UN COMMENT
+                //console.log("A Processed Allowance length " + elegibleList.length);
+                //console.log(`ALLOWANCE Time: ${Date.now() - start}ms`);
 
                 //here i need to processEmployee
 
@@ -132,13 +135,17 @@ module.exports = cds.service.impl(async function () {
             // Assuming iAmount is being calculated or retrieved from somewhere
             const iAmount = parseFloat(oEmployee.amount);  // Replace with actual logic to calculate amount
 
+            console.log("Total Amount: " + iAmount);
+            console.log("Total Count (numberOfUnits): " + oEmployee.count);
+
             if(iAmount === 0){
-                await payComponentRules.checkEmployeePayComponents(employee, sReferenceDate);
+               await payComponentRules.checkEmployeePayComponents(oEmployee, referenceDate);
                 return;
             }
 
             const aPayComponents = await payComponentRules._getEmployeePayComponents(oEmployee.empJob, referenceDate, false, payCompCode);
-
+            console.log("---- test end ----")
+            return;
             await sfecIntegration.runSfEcUpdate(oEmployee, iAmount, referenceDate, aPayComponents, simulationMode, payCompCode);
             await executionLogHandler.createExecutionLogSingleEntry(oEmployee.empJob, referenceDate, sExecutionID, simulationMode, [{ message: `No Dependents are eligible for Employee ${oEmployee.empJob.userId}, date ${referenceDate}` }], true, iAmount, null, null, payCompCode);
             console.log("----- end ---- ")

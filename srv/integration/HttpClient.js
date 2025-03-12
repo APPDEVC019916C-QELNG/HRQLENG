@@ -63,6 +63,10 @@ class HttpClient {
     getCustEligibility = async (sQuery, sReferenceDate) => {
         return await this._doGet(constant.CDS_NAME.CUST_HEALTHCARD_RULES_ELIGIBILITY, sQuery, sReferenceDate, true, true);
     }
+
+    getCustHealthCardRules = async (sQuery, sReferenceDate) => {
+        return await this._doGet(constant.CDS_NAME.CUST_HEALTHCARD_RULES, sQuery, sReferenceDate, true, false);
+    }
     
     getCustDependent = async (sQuery, sReferenceDate, sExpand) => {
         return await this._doGet(constant.CDS_NAME.CUST_DEPENDENTS, sQuery, sReferenceDate, true, true, null, sExpand);

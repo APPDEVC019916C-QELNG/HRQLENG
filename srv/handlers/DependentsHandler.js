@@ -50,13 +50,14 @@ class DependentsHandler {
     };
 
 
-    processChildDependent = async (employee, children, referenceDate, custNat) => {
+    processChildDependent = async ( children, referenceDate, custNat, empId) => {
         let totalAmount = 0;
         let count = 0; // Counter for the number of times an amount was added
     
         for (const child of children) {
             if (await this.childrenPayment.isEligible(child, referenceDate, custNat)) {
-                let amount = await this.amountCalculatorHandler.calculateEmployeeChildPayment(employee, child, referenceDate, custNat, child);
+
+                let amount = await this.amountCalculatorHandler.calculateEmployeeChildPayment(child, referenceDate, custNat, empId);
                 totalAmount += parseFloat(amount) || 0; // Ensures numeric addition
                 if (amount > 0)   count++;
             }
@@ -68,14 +69,14 @@ class DependentsHandler {
     
     
 
-    processSpouseDependent = async (employee, spouses, referenceDate, custNat) => {
+    processSpouseDependent = async (spouses, referenceDate, custNat, empId) => {
 
         let totalAmount = 0;
         let count = 0; // Counter for the number of times an amount was added
     
         for (const spouse of spouses) {
             if (await this.spousePayment.isEligible(spouse, referenceDate, custNat)) {
-                let amount = await this.amountCalculatorHandler.calculateEmployeeSpousePayment(employee, referenceDate, custNat);
+                let amount = await this.amountCalculatorHandler.calculateEmployeeSpousePayment(spouse, referenceDate, custNat, empId);
                 totalAmount += parseFloat(amount) || 0; // Ensures numeric addition
                 if (amount > 0)   count++;
 

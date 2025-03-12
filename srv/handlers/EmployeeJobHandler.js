@@ -57,47 +57,48 @@ class EmployeeJobHandler {
 
 
     processEligibleEmployees = async (eligibleEmployees, referenceDate, custNat) => {
-        let eligibleDetailsList = [];
-
+        const eligibleDetailsList = [];
+    
         for (const employee of eligibleEmployees) {
-            const numberOfUnits = 1;
             const details = await this.processEmployee(employee, referenceDate, custNat);
-
-            // Process dependents independently
-
+            console.log(`Employee amount: ${details.amount}`);
+    
             const dependentList = await this.dependentsHandler.getDependentsList(employee.userId, referenceDate);
-
-            if (dependentList && dependentList.length) {
-
-                // Separate dependents into two categories
-                const children = dependentList.filter(dependent => dependent.cust_FamilyMember === constant.MDF_VALUES.FAMILIY_KEY.CHILDREN);
-                const spouse = dependentList.filter(dependent => dependent.cust_FamilyMember === constant.MDF_VALUES.FAMILIY_KEY.SPOUSE);
-
-
-                const childrenResult  = await this.dependentsHandler.processChildDependent(employee, children, referenceDate, custNat);
-                
-                const spouseResult = await this.dependentsHandler.processSpouseDependent(employee, spouse, referenceDate, custNat);
-
-            
-
-                details.amount = this.sumStrings(childrenResult.totalAmountString ,details.amount);
-
-                details.count = numberOfUnits+childrenResult.count;
-
-                //const totalDependentAmount = await this.dependentsHandler.processDependentDetails(employee, lDependentsDetails, referenceDate, custNat, details);
-
-                //details.emplyeeAount = totalDependentAmount;
-
+    
+            if (!dependentList?.length) {
                 eligibleDetailsList.push(details);
-
+                continue;
             }
+    
+    
+            // Categorize dependents
+            const children = dependentList.filter(d => d.cust_FamilyMember === constant.MDF_VALUES.FAMILIY_KEY.CHILDREN);
+            const spouse = dependentList.filter(d => d.cust_FamilyMember === constant.MDF_VALUES.FAMILIY_KEY.SPOUSE);
 
-
+            console.log(`Children size: ${children.length}`);
+            console.log(`Spouse size: ${spouse.length}`);
+    
+            // Process children and spouse in parallel
+            const [childrenResult, spouseResult] = await Promise.all([
+                this.dependentsHandler.processChildDependent(children, referenceDate, custNat, employee.userId),
+                this.dependentsHandler.processSpouseDependent(spouse, referenceDate, custNat, employee.userId)
+            ]);
+    
+            // Log results
+            console.log(`Children processed amount: ${childrenResult.totalAmountString}`);
+            console.log(`Spouse processed amount: ${spouseResult.totalAmountString}`);
+    
+            // Update details
+            details.amount = this.sumStrings(childrenResult.totalAmountString, details.amount);
+            details.amount = this.sumStrings(spouseResult.totalAmountString, details.amount);
+            details.count = 1 + childrenResult.count + spouseResult.count;
+    
+            eligibleDetailsList.push(details);
         }
-
+    
         return eligibleDetailsList;
-
-    }
+    };
+    
 
         //MIGUEL Move to utils
     sumStrings = (str1, str2) => {

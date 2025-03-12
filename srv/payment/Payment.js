@@ -13,50 +13,7 @@ class Payment {
 
     }
 
-    //MIGUEL: Check with ferreirinha
-    getHealthCardRules = async (userId, referenceDate, ecField, custEligibility, gender) => {
 
-        const gender1 = this._getGender(gender, 1);
-        const gender2 = this._getGender(gender, 2);
-
-        return await this.st_healthCardRules.run(SELECT.one.from(constant.CDS_NAME.CUST_HEALTHCARD_RULES).where(
-            { ref: ["cust_EmployeeCategory"] }, "=", { val: ecField }, "and",
-            { ref: ["cust_Eligibility"] }, "=", { val: custEligibility }, "and",
-            { ref: ["effectiveStartDate"] }, "<=", { val: referenceDate }, "and",
-            { ref: ["mdfSystemRecordStatus"] }, "=", { val: "N" }, "and",
-            "(",
-            { ref: ["cust_Gender"] }, "=", { val: gender1 }, "or",
-            { ref: ["cust_Gender"] }, "=", { val: gender2 },
-            ")",
-            "and",
-            "(",
-            { ref: ["mdfSystemEffectiveEndDate"] }, ">=", { val: referenceDate }, "or",
-            { ref: ["mdfSystemEffectiveEndDate"] }, "is", null,
-            ")"
-        ));
-
-    }
-
-    _getGender = (gender, formatType) => {
-        if (!gender || gender.trim() === "") {
-            throw new Error("Gender cannot be null or empty");
-        }
-
-        switch (formatType) {
-            case 1:
-                return gender.toUpperCase() === "M" || gender === "1" ? "1"
-                    : gender.toUpperCase() === "F" || gender === "2" ? "2"
-                        : null;
-
-            case 2:
-                return gender.toUpperCase() === "M" || gender === "1" ? "M"
-                    : gender.toUpperCase() === "F" || gender === "2" ? "F"
-                        : null;
-
-            default:
-                throw new Error(`Invalid format type: ${formatType}`);
-        }
-    }
 
     isEmployeeApplicable = async (empJob, referenceDate, empRule) => {
         const empDetails = await this.fetchHireDateForUser(empJob.userId);
@@ -65,9 +22,9 @@ class Payment {
     }
 
     isApplicable = (frequency, entryDate, referenceDate) => {
-        console.log("Enter day --> " + entryDate + "   referenceDate.  " + referenceDate);
+        console.log("fequency: " + frequency);
 
-        if (frequency === 1) {
+        if (frequency === 1 || frequency ==='1') {
             return true; // Always applicable for frequency = 1
         }
     

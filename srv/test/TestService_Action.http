@@ -53,13 +53,73 @@ Content-Type: application/json
 }
 
 
+
+### TESTING PHASE - NATIONAL
+POST {{server}}/odata/v4/pc-hrsrv/executeCompHRCalculation
+Content-Type: application/json
+
+{
+    "userIds": [
+      "00002051",
+      "00006136",
+      "00002070",
+      "00006282",
+      "00001842",
+      "00016818",
+      ],
+    "foJobs": [],
+    "departments": [],
+    "groups": [],
+    "orgUnits": [],
+    "hrPersonnelAreas": [],
+    "simulationMode": false,
+    "emails": [],
+    "referenceDate": "2025-01-01",
+    "payComponent": {
+      "ID": "25611292-c3de-4f47-a109-b4f5bc1026dc",
+      "name": "National Health Card",
+     "code": "3126"
+  },
+    "custEmployeeGroups": []
+}
+
+### TESTING PHASE -NON NATIONAL
+POST {{server}}/odata/v4/pc-hrsrv/executeCompHRCalculation
+Content-Type: application/json
+
+{
+    "userIds": [
+
+      ],
+    "foJobs": [],
+    "departments": [],
+    "groups": [],
+    "orgUnits": [],
+    "hrPersonnelAreas": [],
+    "simulationMode": false,
+    "emails": [],
+    "referenceDate": "2025-01-01",
+    "payComponent": {
+      "ID": "25611292-c3de-4f47-a109-b4f5bc1026dc",
+      "name": "Non National Health Card",
+     "code": "3125"
+  },
+    "custEmployeeGroups": []
+}
+
+
 ### test copy from java
 POST {{server}}/odata/v4/pc-hrsrv/executeCompHRCalculation
 Content-Type: application/json
 
 {
     "userIds": [
-    "00002087"
+      "00000508",
+      "00000845",
+      "00016933",
+      "00003585",
+      "00021686",
+      "00004753"
     ],
     "foJobs": [],
     "departments": [],

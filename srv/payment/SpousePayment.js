@@ -25,12 +25,12 @@ class SpousePayment {
                     // Get the gender of the employee for the spouse
                     //let perPersonal = genderService.getPerPersonalForEmployeeId(employeeID);
                     let perPersonal = await this.fetchPersonalForEmployee(employeeID);
-
+                    //console.log("Spouse nationality " + perPersonal.personal);
                     if (!perPersonal) {
                         return null;
                     }
 
-                    isValid = await this.dependentEligibilityRules.isEligible(details, referenceDate, rules);
+                    isValid = await this.dependentEligibilityRules.isEligible(details, referenceDate, rule);
                     
                     if (!isValid) {
                         return null;

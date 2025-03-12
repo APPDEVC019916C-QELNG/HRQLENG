@@ -28,10 +28,12 @@ class AmountCalculatorHandler {
      */
     calculateEmployeePayment = async (empJob, referenceDate, custNat) => {
 
-        const empRule = await this.getCustHealthCardRule(
+        const empRule = await this.getCustHealthCardRuleEmployee(
             empJob.userId, referenceDate, custNat, "employee"
         );
-
+        
+        console.log("Employee rule name: "+empRule !== undefined ?empRule.externalName :" No Rule / undefined rule");
+        
         const bApplicable = await this.payment.isEmployeeApplicable(empJob, referenceDate, empRule);
 
         if (empRule && bApplicable) {
@@ -50,15 +52,27 @@ class AmountCalculatorHandler {
      * @param {string} custNat - The nationality of the customer.
      * @return {number} The calculated spouse payment amount.
      */
-    calculateEmployeeSpousePayment = async (empJob, referenceDate, custNat, ) => {
-        const spouseRule = await this.getCustHealthCardRule(
-            empJob.userId, referenceDate, custNat, "spouse_nat"
+    calculateEmployeeSpousePayment = async (spouse, referenceDate, custNat, empId) => {
+        let spouse_cust_nat;
+        let ecField;
+        if(custNat === "Nat"){
+            spouse_cust_nat = this._determineECFieldForNationalEmployee(custNat);
+            ecField = "national";
+        }else{
+            const perPersonal = await this.fetchPersonalForEmployee(empId);
+            const pickList = await this._getPickList(perPersonal.customString1);
+            spouse_cust_nat = this._determineEligibilityBasedOnSpouseNat(pickList.externalCode);
+            ecField = this.getEligibilityForNonNatEmployee(spouse.cust_Nationality);
+        }
+        const spouseRule = await this.getCustHealthCardRuleSpouse(
+           empId, referenceDate, ecField, spouse_cust_nat
         );
+        
+        console.log("spouse Rule name: "+ spouseRule !== undefined ? spouseRule.externalName :"no rule");
+        console.log("spouse Cust_Nationality: "+ spouse_cust_nat);
 
         if (spouseRule && this.payment.isApplicable(spouseRule.cust_Frequency, referenceDate, spouseRule)) {
-            const spouseAmount = spouseRule.cust_Amount;
-     
-            return { empJob, amount, additionalData: {} };
+            return spouseRule.cust_Amount;
         }
         return 0;
     }
@@ -72,31 +86,35 @@ class AmountCalculatorHandler {
      * @param {string} custNat - The nationality of the customer.
      * @return {number} The calculated child payment amount.
      */
-    calculateEmployeeChildPayment = async (empJob, child, referenceDate, custNat) => {
+    calculateEmployeeChildPayment = async (child, referenceDate, custNat, empId) => {
 
   
-        const childRule = await this.getCustHealthCardRule(
-            empJob.userId, referenceDate, custNat,
-            custNat, child.cust_Nationality
+        const childRule = await this.getCustHealthCardRuleChild(
+            empId, referenceDate, custNat,
+            child.cust_Nationality
         );
 
-        if (childRule && this.payment.isApplicable(childRule.cust_Frequency, childRule.effectiveStartDate , referenceDate)) {
-            const childAmount = childRule.cust_Amount;
+        console.log("Child rule name: "+childRule.externalName);
 
-            return childAmount;
+
+        if (childRule && this.payment.isApplicable(childRule.cust_Frequency, childRule.effectiveStartDate , referenceDate)) {
+            return childRule.cust_Amount;
         }
         return 0;
     }
 
-    getCustHealthCardRule = async (employeeID, referenceDate, ecField, custEligibility) => {
+    getCustHealthCardRuleEmployee = async (employeeID, referenceDate, ecField, custEligibility) => {
 
         const gender = await this.fetchGenderForUser(employeeID);
+        const gender1 = this._getGender(gender, 1);
+        const gender2 = this._getGender(gender, 2);
 
         if (ecField === "Nat") {
-            ecField = "national";  
+            ecField = "national"; 
+            
+            const oRulesResult = await this._fetchHealthCardRules(referenceDate, ecField, custEligibility);
+            return oRulesResult.find(item => item.cust_Gender === gender1 || item.cust_Gender === gender2);
 
-            return this.payment.getHealthCardRules(employeeID, referenceDate, ecField, custEligibility, gender);
-        
         } else {
 
          const perPersonal = await this.fetchPersonalForEmployee(employeeID);
@@ -109,10 +127,66 @@ class AmountCalculatorHandler {
             }
             ecField = this.getEligibilityForNonNatEmployee(pickListNationalOpt.externalCode);
 
-            return this.payment.getHealthCardRules(employeeID, referenceDate, ecField, custEligibility, gender);
+            const oRulesResult = await this._fetchHealthCardRules(referenceDate, ecField, custEligibility);
+            return oRulesResult.find(item => item.cust_Gender === gender1 || item.cust_Gender === gender2);
         }
 
 
+    }
+
+    getCustHealthCardRuleChild = async (employeeID, referenceDate, ecField, custEligibility) => {
+
+        const gender = await this.fetchGenderForUser(employeeID);
+        const gender1 = this._getGender(gender, 1);
+        const gender2 = this._getGender(gender, 2);
+
+        if (ecField === "Nat") {
+            ecField = "national";  
+
+            const oRulesResult = await this._fetchHealthCardRules(referenceDate, ecField, custEligibility);
+            return oRulesResult.find(item => item.cust_Gender === gender1 || item.cust_Gender === gender2);
+        
+        } else {
+
+            const perPersonal = await this.fetchPersonalForEmployee(employeeID);
+
+            const pickListNationalOpt = await this._getPickList(perPersonal.customString1);
+
+            if (!pickListNationalOpt || pickListNationalOpt.length === 0) {
+                console.info(`PickListOption Empty for NON EcField: ${ecField}, Gender: ${gender}, custEligibility: ${custEligibility}`);
+                return null;
+            }
+            ecField = this.getEligibilityForNonNatEmployee(pickListNationalOpt.externalCode);
+            custEligibility = this.getEligibilityForNonNatEmployeeChildDeps(custEligibility);
+
+            const oRulesResult = await this._fetchHealthCardRules(referenceDate, ecField, custEligibility);
+            return oRulesResult.find(item => item.cust_Gender === gender1 || item.cust_Gender === gender2);
+        }
+
+
+    }
+
+    getCustHealthCardRuleSpouse = async (employeeID, referenceDate, ecField, custEligibility) => {
+        const gender = await this.fetchGenderForUser(employeeID);
+        const gender1 = this._getGender(gender, 1);
+        const gender2 = this._getGender(gender, 2);
+
+        const oRulesResult = await this._fetchHealthCardRules(referenceDate, ecField, custEligibility);
+        return oRulesResult.find(item => item.cust_Gender === gender1 || item.cust_Gender === gender2);
+    }
+
+    getEligibilityForNonNatEmployeeChildDeps= (custEligibility) => {
+        const gccCountries = ["SA", "KW", "AE", "BH", "OM"];
+    
+        if (custEligibility.toUpperCase() === "QA") {
+            return "children_nat";
+        }
+    
+        if (gccCountries.includes(custEligibility.toUpperCase())) {
+            return "children_gcc";
+        }
+    
+        return null; // or any default value you need
     }
 
      getEligibilityForNonNatEmployee= (custEligibility) => {
@@ -141,6 +215,35 @@ class AmountCalculatorHandler {
     };
 
 
+    _fetchHealthCardRules= async ( referenceDate, employeeCategory, custNat) => {
+
+        const sQuery = this.queryBuilder.buildHealthCareCustQUery(custNat, employeeCategory);
+
+        return await this.httpClient.getCustHealthCardRules(sQuery, referenceDate);
+    };
+
+    _getGender = (gender, formatType) => {
+        if (!gender || gender.trim() === "") {
+            throw new Error("Gender cannot be null or empty");
+        }
+
+        switch (formatType) {
+            case 1:
+                return gender.toUpperCase() === "M" || gender === "1" ? "1"
+                    : gender.toUpperCase() === "F" || gender === "2" ? "2"
+                        : null;
+
+            case 2:
+                return gender.toUpperCase() === "M" || gender === "1" ? "M"
+                    : gender.toUpperCase() === "F" || gender === "2" ? "F"
+                        : null;
+
+            default:
+                throw new Error(`Invalid format type: ${formatType}`);
+        }
+    }
+
+
     
     _mapGender = (genderField) => {
         const normalizedGender = genderField ? genderField.toLowerCase() : '';
@@ -151,6 +254,28 @@ class AmountCalculatorHandler {
         }
         return null;
     };
+
+     _determineECFieldForNationalEmployee= (nationality) => {
+        if (nationality === "QA" || nationality === "" || nationality === undefined) {
+            return "spouse_nat"; // Spouse (National)
+        } 
+        if (["SA", "KW", "AE", "BH", "OM"].includes(nationality)) {
+            return "spouse_gcc"; // Spouse (GCC)
+        } 
+        return "spouse_nongcc"; // Spouse (Non-GCC)
+    }
+
+    _determineEligibilityBasedOnSpouseNat = (spouseNat) =>{
+        const gccCountries = ["SA", "KW", "AE", "BH", "OM"];
+      
+        if (!spouseNat || spouseNat.trim() === "" || spouseNat.toUpperCase() === "QA") {
+          return "spouse_nat";
+        } else if (gccCountries.includes(spouseNat.toUpperCase())) {
+          return "spouse_gcc";
+        }
+        return "spouse_nongcc";
+      }
+      
 
 
     //andre logic

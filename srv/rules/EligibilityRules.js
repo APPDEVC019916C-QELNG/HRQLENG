@@ -39,7 +39,7 @@ class EligibilityRules {
                         if (bSimulationMode) {
                             await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, this.aErrorMessages.filter(msg => msg.userId == employee.userId), false,null,null,null,sPayCompCode);
                         } else {
-                            const oResult = await payComponentRules.checkEmployeePayComponents(employee, sReferenceDate);
+                            const oResult = await this.payComponentRules.checkEmployeePayComponents(employee, sReferenceDate);
                             await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, [...this.aErrorMessages.filter(msg => msg.userId == employee.userId), ...oResult.message ? [{message: oResult.message}] : [] ], false,null,null,null,sPayCompCode); //MIGUEL
                         }
                         resolve(null);

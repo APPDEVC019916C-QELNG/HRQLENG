@@ -1,6 +1,15 @@
 class QueryBuilder {
     constructor() { }
 
+    buildHealthCareCustQUery = (custNat, cust_employeeCategory ) => {
+
+        const queryString = `mdfSystemRecordStatus eq 'N' and 
+        cust_EmployeeCategory eq '${cust_employeeCategory}' and 
+        cust_Eligibility eq '${custNat}'`;
+        
+        return queryString;
+    };
+
     buildEmployeeFilterQuery = (aFilters) => {
         return aFilters.map(item => {
             if (Array.isArray(item)) {
@@ -31,7 +40,7 @@ class QueryBuilder {
             "cust_National": sCustNat
         },
 
-    ];
+        ];
 
         return this._buildQuery(aFilters);
     }
@@ -41,7 +50,7 @@ class QueryBuilder {
     }
 
     buildEmployeeDependentsDetailsQuery = (sExternalCode, familyCode) => {
-      //  return 'externalCode eq '${sExternalCode} ' and cust_FamilyMember';
+        //  return 'externalCode eq '${sExternalCode} ' and cust_FamilyMember';
         return `externalCode eq '${sExternalCode}' and cust_FamilyMember eq '${familyCode}'`;
 
     }
