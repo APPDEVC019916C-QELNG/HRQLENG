@@ -12,46 +12,30 @@ class PayComponentRules {
         this.formatter = new formatter();
     }
 
-    checkEmployeePayComponents = async (oEmployee, sReferenceDate) => {
-        const aPayComponents = await this._getEmployeePayComponents(oEmployee, sReferenceDate, false);
+
+    checkEmployeePayComponents = async (userId, sReferenceDate, payCompCode, simulationMode) => {
+        const aPayComponents = await this.getEmployeePayComponents(userId, sReferenceDate, payCompCode);
+        
         if (aPayComponents && aPayComponents.length) {
-            const bValidRefDate = this._validateRefDate(aPayComponents, sReferenceDate);
-            if (bValidRefDate) {
-                // Scenario 1 – All the records have a start date >= “Reference Date”
-                const aResults = await this._deleteRecurringPayComponentList(oEmployee, aPayComponents);
-                if (aResults.d && aResults.d.length > 0) {
-                    return { bToUpdate: true, sDetails: constant.DETAILS.DELETION, message: aResults.d.filter(res => res.httpCode != 200).map(res => res.message).join(" | ") };
-                } else {
-                    return { bToUpdate: true, sDetails: constant.DETAILS.ERROR };
-                }
-            } else {
-                // Scenario 2 – A record has a start date < “Reference Date”
-                const oEmpCompObj = await this._getActiveEmpCompensation(oEmployee, sReferenceDate);
-                const oPortletRes = await this._createCompensationPortlet(oEmpCompObj, sReferenceDate);
-
-                if (oPortletRes.d && oPortletRes.d[0].httpCode == 200) {
-                    const aNewPayComponents = await this._getEmployeePayComponents(oEmployee, sReferenceDate, false);
-                    const aResults = await this._deleteRecurringPayComponentList(oEmployee, aNewPayComponents);
-                    if (aResults.d && aResults.d.length > 0) {
-                        return { bToUpdate: true, sDetails: constant.DETAILS.DELETION, message: aResults.d.filter(res => res.httpCode != 200).map(res => res.message).join(" | ") };
-                    } else {
-                        return { bToUpdate: true, sDetails: constant.DETAILS.ERROR };
-                    }
-
-                } else {
-                    return { bToUpdate: true, sDetails: constant.DETAILS.ERROR, message: oPortletRes.d ? oPortletRes.d[0].mesage : null };
-                }
+            if (!simulationMode) {
+                // Execute upsert for each pay component in parallel
+                await Promise.all(aPayComponents.map(async (payComponent) => {
+                    const sObject = this._buildRecurringPayComponentDelete(payComponent, userId, sReferenceDate);
+                    await this.httpClient.upsertEmpPayCompNonRecurring(sObject);
+                    console.log("deleted one component");
+                }));
             }
-        } else {
-            return { bToUpdate: false} ;
-        }
+            //miguel log error
+            return { bToUpdate: true, sDetails: constant.DETAILS.SCENARIO_7_3 }; 
+        } 
+    
+        return { bToUpdate: false, sDetails: constant.DETAILS.SCENARIO_7_2 };
+    };
 
-    }
-
-    _getEmployeePayComponents = (oEmployee, sReferenceDate, bToDate, payCompCode) => {
+    getEmployeePayComponents = (userId, sReferenceDate, payCompCode) => {
         return new Promise(async resolve => {
-            const sQuery = this.queryBuilder.buildEmployeeRecurringPayCompQuery(oEmployee.userId, payCompCode );
-            resolve(await this.httpClient.getEmpPayCompNonRecurring(sQuery, sReferenceDate, bToDate));
+            const sQuery = this.queryBuilder.buildEmployeeRecurringPayCompQuery(userId, sReferenceDate, payCompCode );
+            resolve(await this.httpClient.getEmpPayCompNonRecurring(sQuery));
         });
     }
 
@@ -75,12 +59,29 @@ class PayComponentRules {
         return await Promise.all(aPromise).then(async aResults => { return await this.httpClient.upsertEmpPayCompRecurring(aResults) });
     }
 
-    _buildRecurringPayComponent = async (oComponent, oEmployee) => {
+    //MIGUEL Move to querybuilder
+    _buildRecurringPayComponentDelete = (payComponent, userId, referenceDate) => {
         return {
-            userId: oEmployee.userId,
-            payComponent: constant.MDF_VALUES.PAY_COMPONENT.toString(),
-            startDate : oComponent.startDate,
-            operation: constant.MDF_VALUES.OPERATION.DELIMIT
+            userId: userId,
+            payComponentCode: payComponent.payComponentCode,
+            sequenceNumber: payComponent.sequenceNumber,
+            payDate : this.convertToSapDateFormat(referenceDate),
+            operation: constant.MDF_VALUES.OPERATION.DELETE
+        };
+
+    }
+
+     convertToSapDateFormat = (dateString) => {
+        const date = new Date(dateString + "T00:00:00Z"); 
+        const ticks = date.getTime();
+        return `/Date(${ticks})/`;
+    }
+
+    _buildRecurringPayComponent =  (payComponent, userId, referenceDate) => {
+        return {
+            userId: userId,
+            payComponentCode: payComponent,
+            payDate :`${referenceDate}T00:00:00Z`,
         };
     }
 

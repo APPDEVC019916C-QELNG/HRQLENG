@@ -58,8 +58,8 @@ class DependentsHandler {
             if (await this.childrenPayment.isEligible(child, referenceDate, custNat)) {
 
                 let amount = await this.amountCalculatorHandler.calculateEmployeeChildPayment(child, referenceDate, custNat, empId);
-                totalAmount += parseFloat(amount) || 0; // Ensures numeric addition
-                if (amount > 0)   count++;
+                totalAmount += parseFloat(amount) || 0;
+                if (totalAmount > 0)   count++;
             }
         }
         const totalAmountString = totalAmount.toString();
@@ -77,8 +77,8 @@ class DependentsHandler {
         for (const spouse of spouses) {
             if (await this.spousePayment.isEligible(spouse, referenceDate, custNat, empId)) {
                 let amount = await this.amountCalculatorHandler.calculateEmployeeSpousePayment(spouse, referenceDate, custNat, empId);
-                totalAmount += parseFloat(amount) || 0; // Ensures numeric addition
-                if (amount > 0)   count++;
+                totalAmount += parseFloat(amount) || 0; 
+                if (totalAmount > 0)   count++;
 
             }
         }

@@ -22,9 +22,9 @@ class Payment {
     }
 
     isApplicable = (frequency, entryDate, referenceDate) => {
-        console.log("fequency: " + frequency);
-
-        if (frequency === 1 || frequency ==='1') {
+        console.log("frequency: " + frequency);
+    
+        if (frequency === 1 || frequency === '1') {
             return true; // Always applicable for frequency = 1
         }
     
@@ -32,9 +32,18 @@ class Payment {
             return false; // Null check for entry date
         }
     
-        // Convert entryDate from string to Date object
-        const entryDateObj = new Date(entryDate);
-        const referenceDateObj = new Date(referenceDate);
+        // Function to parse date
+        const parseDate = (date) => {
+            if (typeof date === 'string' && date.startsWith('/Date(')) {
+                const timestamp = parseInt(date.match(/\d+/)[0], 10);
+                return new Date(timestamp);
+            }
+            return new Date(date);
+        };
+    
+        // Convert entryDate and referenceDate to Date objects
+        const entryDateObj = parseDate(entryDate);
+        const referenceDateObj = parseDate(referenceDate);
     
         if (isNaN(entryDateObj) || isNaN(referenceDateObj)) {
             console.error("Invalid date format for entryDate or referenceDate");
@@ -67,7 +76,7 @@ class Payment {
         }
     
         return false;
-    }
+    };
 
 
     fetchHireDateForUser = async (id) => {

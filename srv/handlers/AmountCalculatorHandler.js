@@ -38,7 +38,8 @@ class AmountCalculatorHandler {
 
         if (empRule && bApplicable) {
             const amount = empRule.cust_Amount;
-            return { empJob, amount, additionalData: {} };
+            const count = 1;
+            return { empJob, amount, count, additionalData: {} };
         }
         return null;
     }
@@ -71,7 +72,7 @@ class AmountCalculatorHandler {
       //  console.log("spouse Rule name: "+ spouseRule !== undefined ? spouseRule.externalName :"no rule");
         console.log("spouse Cust_Nationality: "+ spouse_cust_nat);
 
-        if (spouseRule && this.payment.isApplicable(spouseRule.cust_Frequency, referenceDate, spouseRule)) {
+        if (spouseRule && this.payment.isApplicable(spouseRule.cust_Frequency, spouse.cust_FirstEntryDate, referenceDate)) {
             return spouseRule.cust_Amount;
         }
         return 0;

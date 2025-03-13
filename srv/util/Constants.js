@@ -9,7 +9,6 @@ module.exports = Object.freeze({
         CUST_DEPENDENTS: "cust_Dependents",
         CUST_DEPENDENTS_DETAILS: "cust_DependentsDetails",
         CUST_SCHOOL_TRANSP_ALLOWANCE_RULES: "cust_SchoolTranspAllowance_Rules",
-        EMP_PAY_COMP_RECURRING: "EmpPayCompRecurring",
         EMP_PAY_COMP_NON_RECURRING: "EmpPayCompNonRecurring",
         EXECUTION_LOG: "ExecutionLog",
         FO_DEPARTMENT: "FODepartment",
@@ -43,7 +42,7 @@ module.exports = Object.freeze({
             DEPARTMENT: "50015713"
         },
         OPERATION: {
-            DELIMIT: "DELIMIT"
+            DELETE: "DELETE"
         }
     },
 
@@ -66,18 +65,16 @@ module.exports = Object.freeze({
         NEW_PAY_COMPONENT: "New Pay Component",
         AMOUNT_CHANGE: "Amount Change",
         DELETION: "Deletion - Paid Incorrectly",
-        NOT_ELIGIBLE: "Not eligible",
+        NOT_ELIGIBLE: "Employee is not eligible",
         SCENARIO_1: "Employee Pay Components value with same calculated Amount",
-        SCENARIO_2: "Updated on SFF - Employee Pay Components value with same calculated Amount but Reference Date is NOT valid and needs to created",
-        SCENARIO_3_1: "Updated on SFF - Employee Pay Components value with different calculated Amount with valid startDate equal to Reference Date",
-        SCENARIO_3_2: "Updated on SFF - Employee Pay Components value with different calculated Amount with no valid startDate equal to Reference Date",
-        SCENARIO_4_1: "Updated on SFF - Employee has no Pay Component but has Compensation Portlet with valid startDate equal to Reference Date",
+        SCENARIO_2: "Employee has the Pay Component but with a different amount or number compared to the information calculated by the program",
+        SCENARIO_3: "Employee do not have the Pay Component at all and it should be created”",
         SCENARIO_4: "Updated on SFF - Employee has no Pay Component and no Compensation Portlet with valid startDate equal to Reference Date",
         SCENARIO_2_SIMULATION: "Employee Pay Components value with same calculated Amount but Reference Date is NOT valid and needs to created",
-        SCENARIO_3_1_SIMULATION: "Employee Pay Components value with different calculated Amount with valid startDate equal to Reference Date",
-        SCENARIO_3_2_SIMULATION: "Employee Pay Components value with different calculated Amount with no valid startDate equal to Reference Date",
-        SCENARIO_4_1_SIMULATION: "Employee has no Pay Component but has Compensation Portlet with valid startDate equal to Reference Date",
-        SCENARIO_4_2: "Employee has no Pay Component and no Compensation Portlet with valid startDate equal to Reference Date",
-        ERROR: "There was an error executing the UPSERT on SF EC"
+        SCENARIO_3_SIMULATION: "Employee Pay Components value with same calculated Amount but Reference Date is NOT valid and needs to created",
+        ERROR: "There was an error executing the UPSERT on SF EC",
+        SCENARIO_7_1: "Employee is not eligible",
+        SCENARIO_7_2: "Employee eligible but the calculated amount is 0",
+        SCENARIO_7_3: "Employee is not eligible or the calculated amount is 0 but there is an existing record for the Pay Component to be deleted"
     }
 });

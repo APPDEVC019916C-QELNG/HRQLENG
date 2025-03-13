@@ -17,7 +17,7 @@ GET {{server}}/odata/v4/pc-hrsrv/ExecutionLog?$filter=contains(details, 'Scenari
 Content-Type: application/json
 
 ### LOGS 
-GET {{server}}/odata/v4/pc-hrsrv/ExecutionLog?$orderby=executionID desc
+GET {{server}}/odata/v4/pc-hrsrv/AllExecutionLog?$filter=executionID eq 49
 Content-Type: application/json
 
 ###
@@ -60,8 +60,13 @@ Content-Type: application/json
 
 {
     "userIds": [
-      "00006136"
-      ],
+      "00002051",
+      "00006136",
+      "00002070",
+      "00006282",
+      "00001842",
+      "00016818"
+    ],
     "foJobs": [],
     "departments": [],
     "groups": [],
@@ -96,7 +101,7 @@ Content-Type: application/json
     "groups": [],
     "orgUnits": [],
     "hrPersonnelAreas": [],
-    "simulationMode": false,
+    "simulationMode": true,
     "emails": [],
     "referenceDate": "2025-01-01",
     "payComponent": {
@@ -114,12 +119,7 @@ Content-Type: application/json
 
 {
     "userIds": [
-      "00000508",
-      "00000845",
-      "00016933",
-      "00003585",
-      "00021686",
-      "00004753"
+      "00001842"
     ],
     "foJobs": [],
     "departments": [],

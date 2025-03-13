@@ -22,7 +22,7 @@ class ExecutionLogHandler {
     }
 
     createExecutionLogSingleEntry = async (oEmployee, sReferenceDate, sExecutionID, bSimulationMode, aErrorMessages, bEligible, iAmount, bToUpdate, sDetails, sPayCompCode) => {
-        await this._createLogEntry(await this._buildPayload(oEmployee, sReferenceDate, sExecutionID, bSimulationMode, aErrorMessages, bEligible, iAmount, bToUpdate, sDetails));
+        await this._createLogEntry(await this._buildPayload(oEmployee, sReferenceDate, sExecutionID, bSimulationMode, aErrorMessages, bEligible, iAmount, bToUpdate, sDetails, sPayCompCode));
     }
 
     _buildPayload = async (oEmployee, sReferenceDate, sExecutionID, bSimulationMode, aErrorMessages, bEligible, iAmount, bToUpdate, sDetails, sPayCompCode) => {

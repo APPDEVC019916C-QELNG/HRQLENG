@@ -66,8 +66,6 @@ class EmployeeJobHandler {
 
             const details = await this.processEmployee(employee, referenceDate, custNat);
             console.log(`Employee amount: ${details.amount}`);
-
-            details.count = 1
     
             const dependentList = await this.dependentsHandler.getDependentsList(employee.userId, referenceDate);
     
@@ -94,13 +92,18 @@ class EmployeeJobHandler {
             ]);
     
             // Log results
-            console.log(`Children processed amount: ${childrenResult.totalAmountString}`);
-            console.log(`Spouse processed amount: ${spouseResult.totalAmountString}`);
+            if(childrenResult){
+                console.log(`Children processed amount: ${childrenResult.totalAmountString}`);
+            }
+            
+            if(spouseResult){
+                console.log(`Spouse processed amount: ${spouseResult.totalAmountString}`);
+            }
     
             // Update details
             details.amount = this.sumStrings(childrenResult.totalAmountString, details.amount);
             details.amount = this.sumStrings(spouseResult.totalAmountString, details.amount);
-            details.count = childrenResult.count + spouseResult.count;
+            details.count = details.count + childrenResult.count + spouseResult.count;
     
             eligibleDetailsList.push(details);
             console.log("TOTAL AMOUNT: " +details.amount);
@@ -133,6 +136,7 @@ class EmployeeJobHandler {
             employeeDetails = {
                 "empJob": employee,
                 "amount": 0,
+                "count": 0,
                 "additionalData": {}
             };
         }

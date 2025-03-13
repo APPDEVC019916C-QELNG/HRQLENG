@@ -111,50 +111,47 @@ module.exports = cds.service.impl(async function () {
 
             if (aEligibleEmployeeRes && aEligibleEmployeeRes.length) {
 
-                //Miguel does this make sense ?
                 const custNat = _determineCustNationality(sPayCompCode);
 
                 const elegibleList = await employeeJobHandler.processEligibleEmployees(aEligibleEmployeeRes, referenceDate, custNat);
 
-                //UN COMMENT
-                //console.log("A Processed Allowance length " + elegibleList.length);
-                //console.log(`ALLOWANCE Time: ${Date.now() - start}ms`);
+                console.log("A Processed Allowance length " + elegibleList.length);
+                console.log(`ALLOWANCE Time: ${Date.now() - start}ms`);
 
-                //processWinner(elegibleList,referenceDate, oRequest.simulationMode, sPayCompCode, sExecutionID);
-            }else {
-                executionLogHandler.createExecutionLogSingleEntry(null, oRequest.referenceDate, sExecutionID, oRequest.simulationMode, [{ message: "No Employees were found for selected filter criteria" }],null, null, false, null, sPayCompCode);
+                await processWinner(elegibleList, referenceDate, oRequest.simulationMode, sPayCompCode, sExecutionID);
+            } else {
+                executionLogHandler.createExecutionLogSingleEntry(null, oRequest.referenceDate, sExecutionID, oRequest.simulationMode, [{ message: "No Employees were found for selected filter criteria" }], null, null, false, null, sPayCompCode); //REMOVE HARDCODED MIGUEL
             }
-        } 
+        }
     };
 
 
-    processWinner = async (winners, referenceDate, simulationMode, payCompCode, sExecutionID)  => {
+    processWinner = async (winners, referenceDate, simulationMode, payCompCode, sExecutionID) => {
         for (const oEmployee of winners) {
             // Assuming iAmount is being calculated or retrieved from somewhere
             const iAmount = parseFloat(oEmployee.amount);  // Replace with actual logic to calculate amount
 
             console.log("Total Amount: " + iAmount);
             console.log("Total Count (numberOfUnits): " + oEmployee.count);
-
-            if(iAmount === 0){
-               await payComponentRules.checkEmployeePayComponents(oEmployee, referenceDate);
+           
+            if (iAmount === 0) {
+                console.log("amount is zero, deleting it now");
+                const result = await payComponentRules.checkEmployeePayComponents(oEmployee.empJob.userId, referenceDate, payCompCode, simulationMode);
+                await executionLogHandler.createExecutionLogSingleEntry(oEmployee.empJob, referenceDate, sExecutionID, simulationMode, null, true, null, result.bToUpdate, result.sDetails, payCompCode); //log error MIGUEL
+               
+                console.log("----- test end ---- ")
                 return;
-            }
 
-            const aPayComponents = await payComponentRules._getEmployeePayComponents(oEmployee.empJob, referenceDate, false, payCompCode);
-            console.log("---- test end ----")
-            return;
-            await sfecIntegration.runSfEcUpdate(oEmployee, iAmount, referenceDate, aPayComponents, simulationMode, payCompCode);
-            await executionLogHandler.createExecutionLogSingleEntry(oEmployee.empJob, referenceDate, sExecutionID, simulationMode, [{ message: `No Dependents are eligible for Employee ${oEmployee.empJob.userId}, date ${referenceDate}` }], true, iAmount, null, null, payCompCode);
-            console.log("----- end ---- ")
+            } else {
+                const aPayComponents = await payComponentRules.getEmployeePayComponents(oEmployee.empJob.userId, referenceDate, payCompCode);
+                const sfecResult = await sfecIntegration.runSfEcUpdate(oEmployee, iAmount, referenceDate, aPayComponents, simulationMode, payCompCode);
+                await executionLogHandler.createExecutionLogSingleEntry(oEmployee.empJob, referenceDate, sExecutionID, simulationMode, sfecResult.message ? [{ message: sfecResult.message }] : null ,true, iAmount, sfecResult.bToUpdate, sfecResult.sDetails, payCompCode);
+
+                console.log("----- test end ---- ")
+            }
 
         }
     };
-
-
-
-    
-
 
     _determineCustNationality = (sPayCompCode) => {
         return sPayCompCode.toLowerCase() === "3125" ? "NonNat" : "Nat";

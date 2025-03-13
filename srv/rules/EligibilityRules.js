@@ -37,10 +37,11 @@ class EligibilityRules {
                         resolve(employee);
                     } else {
                         if (bSimulationMode) {
-                            await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, this.aErrorMessages.filter(msg => msg.userId == employee.userId), false,null,null,null,sPayCompCode);
+                            await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, this.aErrorMessages.filter(msg => msg.userId == employee.userId), false,null,null,"toCHange", sPayCompCode);
                         } else {
-                            const oResult = await this.payComponentRules.checkEmployeePayComponents(employee, sReferenceDate);
-                            await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, [...this.aErrorMessages.filter(msg => msg.userId == employee.userId), ...oResult.message ? [{message: oResult.message}] : [] ], false,null,null,null,sPayCompCode); //MIGUEL
+                            console.log("checking if component exits then delete");
+                            const oResult = await this.payComponentRules.checkEmployeePayComponents(employee.userId, sReferenceDate, sPayCompCode, bSimulationMode);
+                            await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, [...this.aErrorMessages.filter(msg => msg.userId == employee.userId), ...oResult.message ? [{message: oResult.message}] : [] ], false,null,null,oResult.sDetails, sPayCompCode); //MIGUEL
                         }
                         resolve(null);
                     }
@@ -58,7 +59,7 @@ class EligibilityRules {
 
         const aPromise = aQueries.map(oQueryObj =>
             this.limiter.schedule(async () => {
-                const oEligbRule = await this.httpClient.getCustEligibility(oQueryObj.sQuery, sReferenceDate);
+                const oEligbRule = await this.httpClient.getCustEligibility(oQueryObj.sQuery, sReferenceDate, oEmployee.userId);
 
                 if (oEligbRule && oEligbRule.length > 0) {
                     if (oQueryObj.oRule.withPickList) {

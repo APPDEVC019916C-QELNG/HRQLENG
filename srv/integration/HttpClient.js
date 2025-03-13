@@ -52,16 +52,16 @@ class HttpClient {
         return await this._doGet(constant.CDS_NAME.EMP_JOB, sQuery, sReferenceDate, true, true, "userId");
     }
 
-    getEmpPayCompNonRecurring = async (sQuery, sReferenceDate, bToDate) => {
-        return await this._doGet(constant.CDS_NAME.EMP_PAY_COMP_NON_RECURRING, sQuery, sReferenceDate, true, bToDate);
+    getEmpPayCompNonRecurring = async (sQuery) => {
+        return await this._doGet(constant.CDS_NAME.EMP_PAY_COMP_NON_RECURRING, sQuery);
     }
 
     getEmpCompensation = async (sQuery, sReferenceDate, bFromDate, bToDate) => {
         return await this._doGet(constant.CDS_NAME.EMP_COMPENSATION, sQuery, sReferenceDate, bFromDate, bToDate);
     }
 
-    getCustEligibility = async (sQuery, sReferenceDate) => {
-        return await this._doGet(constant.CDS_NAME.CUST_HEALTHCARD_RULES_ELIGIBILITY, sQuery, sReferenceDate, true, true);
+    getCustEligibility = async (sQuery, sReferenceDate, userId) => {
+        return await this._doGet(constant.CDS_NAME.CUST_HEALTHCARD_RULES_ELIGIBILITY, sQuery, sReferenceDate, true, true, null, null, userId);
     }
 
     getCustHealthCardRules = async (sQuery, sReferenceDate) => {
@@ -82,7 +82,7 @@ class HttpClient {
         return await this._doGet(constant.CDS_NAME.CUST_SCHOOL_TRANSP_ALLOWANCE_RULES, sQuery, sReferenceDate, true, true);
     }
 
-    _doGet = (sEntityName, sQuery, sReferenceDate, bFromDate, bToDate, sOrderBy, sExpand) => {
+    _doGet = (sEntityName, sQuery, sReferenceDate, bFromDate, bToDate, sOrderBy, sExpand, userId) => {
         return new Promise(async resolve => {
             const destination = await sdkDest.getDestination({ destinationName: this.destinationName });
 
@@ -143,6 +143,8 @@ class HttpClient {
                 const response = await sdkHttpRequest.executeHttpRequest(destination, requestOptions, { fetchCsrfToken: false });
                 allRecords = allRecords.concat(response.data.d.results);
                 } catch(error){
+                    console.log("userId" + userId)
+                    console.log("url search:"+ url.search)
                     debugger;
                 }
             }

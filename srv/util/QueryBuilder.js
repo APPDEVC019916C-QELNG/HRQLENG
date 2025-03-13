@@ -63,8 +63,8 @@ class QueryBuilder {
         return `mdfSystemRecordStatus eq '${sSystemStatus}'`;
     }
 
-    buildEmployeeRecurringPayCompQuery = (userId, sPayComponent) => {
-        return `userId eq '${userId}' and payComponentCode eq '${sPayComponent}'`;
+    buildEmployeeRecurringPayCompQuery = (userId, referenceDate, payCompCode) => {
+        return `userId eq '${userId}' and payComponentCode eq '${payCompCode}' and payDate eq '${referenceDate}'`;
     }
 
     buildEmpCompensationQuery = (sUserId) => {
