@@ -9,8 +9,7 @@ const EventEmitter = require("events");
 const HttpClient = require('./integration/HttpClient');
 const PayComponentRules = require('./rules/PayComponentRules');
 const SfecIntegration = require('./integration/SF_EC_Integration');
-
-
+const constant = require('./util/Constants');
 
 
 module.exports = cds.service.impl(async function () {
@@ -119,39 +118,39 @@ module.exports = cds.service.impl(async function () {
                 console.log(`ALLOWANCE Time: ${Date.now() - start}ms`);
 
                 await processWinner(elegibleList, referenceDate, oRequest.simulationMode, sPayCompCode, sExecutionID);
-            } else {
-                executionLogHandler.createExecutionLogSingleEntry(null, oRequest.referenceDate, sExecutionID, oRequest.simulationMode, [{ message: "No Employees were found for selected filter criteria" }], null, null, false, null, sPayCompCode); //REMOVE HARDCODED MIGUEL
             }
+        }else{
+            executionLogHandler.createExecutionLogSingleEntry(null, oRequest.referenceDate, sExecutionID, oRequest.simulationMode, [{ message: constant.DETAILS.NO_RESULTS}], null, null, null, false, null, sPayCompCode);
         }
     };
+
 
 
     processWinner = async (winners, referenceDate, simulationMode, payCompCode, sExecutionID) => {
         for (const oEmployee of winners) {
-            // Assuming iAmount is being calculated or retrieved from somewhere
-            const iAmount = parseFloat(oEmployee.amount);  // Replace with actual logic to calculate amount
-
+            const iAmount = parseFloat(oEmployee.amount);
+            const iCount = parseFloat(oEmployee.count)
+    
             console.log("Total Amount: " + iAmount);
             console.log("Total Count (numberOfUnits): " + oEmployee.count);
-           
+    
             if (iAmount === 0) {
                 console.log("amount is zero, deleting it now");
-                const result = await payComponentRules.checkEmployeePayComponents(oEmployee.empJob.userId, referenceDate, payCompCode, simulationMode);
-                await executionLogHandler.createExecutionLogSingleEntry(oEmployee.empJob, referenceDate, sExecutionID, simulationMode, null, true, null, result.bToUpdate, result.sDetails, payCompCode); //log error MIGUEL
-               
-                console.log("----- test end ---- ")
-                return;
-
-            } else {
-                const aPayComponents = await payComponentRules.getEmployeePayComponents(oEmployee.empJob.userId, referenceDate, payCompCode);
-                const sfecResult = await sfecIntegration.runSfEcUpdate(oEmployee, iAmount, referenceDate, aPayComponents, simulationMode, payCompCode);
-                await executionLogHandler.createExecutionLogSingleEntry(oEmployee.empJob, referenceDate, sExecutionID, simulationMode, sfecResult.message ? [{ message: sfecResult.message }] : null ,true, iAmount, sfecResult.bToUpdate, sfecResult.sDetails, payCompCode);
-
-                console.log("----- test end ---- ")
+                const result = await payComponentRules.checkEmployeePayComponents(oEmployee.empJob.userId, referenceDate, payCompCode, simulationMode, true);
+                await executionLogHandler.createExecutionLogSingleEntry(oEmployee.empJob, referenceDate, sExecutionID, simulationMode, result.message, true, 0, 0, result.bToUpdate, result.sDetails, payCompCode);
+    
+                console.log("----- test end ---- ");
+                continue; 
             }
-
+    
+            const aPayComponents = await payComponentRules.getEmployeePayComponents(oEmployee.empJob.userId, referenceDate, payCompCode);
+            const sfecResult = await sfecIntegration.runSfEcUpdate(oEmployee, iAmount, referenceDate, aPayComponents, simulationMode, payCompCode);
+            await executionLogHandler.createExecutionLogSingleEntry(oEmployee.empJob, referenceDate, sExecutionID, simulationMode, sfecResult.message, true, iAmount, iCount, sfecResult.bToUpdate, sfecResult.sDetails, payCompCode);
+    
+            console.log("----- test end ---- ");
         }
     };
+    
 
     _determineCustNationality = (sPayCompCode) => {
         return sPayCompCode.toLowerCase() === "3125" ? "NonNat" : "Nat";

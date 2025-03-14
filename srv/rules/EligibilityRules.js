@@ -25,8 +25,6 @@ class EligibilityRules {
         let aPromise = [];
         this.aErrorMessages = [];
 
-        //const aCdsRules = await this.cruder.read(constant.CDS_NAME.EMPLOYEE_ELIGIBILITY_RULE).where({ "target": constant.CDS_PROPERTY.EMPLOYEE });
-
         const aCdsRules = await this.cruder.read(constant.CDS_NAME.EMPLOYEE_ELIGIBILITY_RULE, [['target', '=',constant.CDS_PROPERTY.EMPLOYEE], ['payComponent', '=', sPayCompCode]], 'AND' );
 
 
@@ -36,13 +34,11 @@ class EligibilityRules {
                     if (bIsEligible) {
                         resolve(employee);
                     } else {
-                        if (bSimulationMode) {
-                            await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, this.aErrorMessages.filter(msg => msg.userId == employee.userId), false,null,null,"toCHange", sPayCompCode);
-                        } else {
-                            console.log("checking if component exits then delete");
-                            const oResult = await this.payComponentRules.checkEmployeePayComponents(employee.userId, sReferenceDate, sPayCompCode, bSimulationMode);
-                            await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, [...this.aErrorMessages.filter(msg => msg.userId == employee.userId), ...oResult.message ? [{message: oResult.message}] : [] ], false,null,null,oResult.sDetails, sPayCompCode); //MIGUEL
-                        }
+
+                        console.log("checking if component exits then delete");
+                        const oResult = await this.payComponentRules.checkEmployeePayComponents(employee.userId, sReferenceDate, sPayCompCode, bSimulationMode, bIsEligible);
+                        await this.executionLogHandler.createExecutionLogSingleEntry(employee, sReferenceDate, sExecutionID, bSimulationMode, oResult.message , false,null, 0, 0, oResult.sDetails, sPayCompCode); //MIGUEL
+                        
                         resolve(null);
                     }
                 })

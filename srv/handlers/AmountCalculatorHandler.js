@@ -144,7 +144,7 @@ class AmountCalculatorHandler {
         if (ecField === "Nat") {
             ecField = "national";  
 
-            const oRulesResult = await this._fetchHealthCardRules(referenceDate, ecField, custEligibility);
+            const oRulesResult = await this._fetchHealthCardRules(referenceDate, ecField, "children_nat");
             return oRulesResult.find(item => item.cust_Gender === gender1 || item.cust_Gender === gender2);
         
         } else {

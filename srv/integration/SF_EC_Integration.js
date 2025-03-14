@@ -34,7 +34,8 @@ class SF_EC_Integration {
     _runScenario1 = () => {
         return {
             bToUpdate: false,
-            sDetails: constant.DETAILS.SCENARIO_1
+            sDetails: constant.DETAILS.SCENARIO_1,
+            message : ""
         }
     }
 
@@ -42,7 +43,7 @@ class SF_EC_Integration {
     _runScenario2 = (bSimulationMode, oEmployee, iAmount, sReferenceDate, sPayComponent, count, sequenceNumber) => {
         return new Promise(async resolve => {
             if (bSimulationMode) {
-                resolve({ bToUpdate: true, sDetails: constant.DETAILS.SCENARIO_2_SIMULATION });
+                resolve({ bToUpdate: true, sDetails: constant.DETAILS.SCENARIO_2 });
             } else {
                 //with the payComponent, get the something value
                 const oPayCompRes = await this._createRecurringPayComponent(oEmployee, iAmount, sReferenceDate, sPayComponent, count, sequenceNumber);
@@ -60,7 +61,7 @@ class SF_EC_Integration {
     _runScenario3 = (bSimulationMode, oEmployee, iAmount, sReferenceDate, sPayComponent, count) => {
         return new Promise(async resolve => {
             if (bSimulationMode) {
-                resolve({ bToUpdate: true, sDetails: constant.DETAILS.SCENARIO_3_SIMULATION });//MIGUEL CHANGEs
+                resolve({ bToUpdate: true, sDetails: constant.DETAILS.SCENARIO_3  });//MIGUEL CHANGEs
             } else {
 
                 const oPayCompRes = await this._createRecurringPayComponent(oEmployee, iAmount, sReferenceDate, sPayComponent, count, null);

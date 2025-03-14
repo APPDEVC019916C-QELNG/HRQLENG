@@ -84,17 +84,10 @@ class DependentsEligibilityRules {
     }
 
     _validateEligibilityRule = async (oDependent, oRule, oEligbRule, sReferenceDate) => {
-        const fieldMap = {
-            "qid_expiry date": oEligbRule.cust_Values,
-            "employed": oEligbRule.cust_Employed,
-            "maried": oEligbRule.cust_Married,
-        };
-
-        const valueToValidate = fieldMap[oEligbRule.cust_ECField] || oEligbRule.cust_ECField;
 
         return this.validator.validateWithOperator(
             oEligbRule.cust_Operator,
-            valueToValidate,
+            oEligbRule.cust_Values,
             oDependent[oRule.targetEntityProp],
             oRule.isDate,
             sReferenceDate

@@ -19,7 +19,7 @@ class Validator {
         if (bIsDate) {
             return this.validateDateWithOperator(sOperator, sValues, sCode, sReferenceDate);
         }
-        else if (typeof sCode === 'Y' || typeof sCode === 'N' ||typeof sCode === 'boolean') {
+        else if (typeof sCode === 'boolean') {
             return this.validateBooleanWithOperator(sOperator, sValues, sCode);
         } else {
             return this.validateStringWithOperator(sOperator, sValues, sCode);

@@ -17,7 +17,8 @@ GET {{server}}/odata/v4/pc-hrsrv/ExecutionLog?$filter=contains(details, 'Scenari
 Content-Type: application/json
 
 ### LOGS 
-GET {{server}}/odata/v4/pc-hrsrv/AllExecutionLog?$filter=executionID eq 49
+GET {{server}}/odata/v4/pc-hrsrv/AllExecutionLog?$filter=executionID eq 29
+
 Content-Type: application/json
 
 ###
@@ -41,7 +42,7 @@ Content-Type: application/json
     "groups": [],
     "orgUnits": [],
     "hrPersonnelAreas": [],
-    "simulationMode": false,
+    "simulationMode": true,
     "emails": [],
     "referenceDate": "2025-01-01",
     "payComponent": {
@@ -60,12 +61,7 @@ Content-Type: application/json
 
 {
     "userIds": [
-      "00002051",
-      "00006136",
-      "00002070",
-      "00006282",
-      "00001842",
-      "00016818"
+      "0000X123"
     ],
     "foJobs": [],
     "departments": [],
@@ -83,25 +79,20 @@ Content-Type: application/json
     "custEmployeeGroups": []
 }
 
-### TESTING PHASE -NON NATIONAL
+### TESTING PHASE - NON NATIONAL
 POST {{server}}/odata/v4/pc-hrsrv/executeCompHRCalculation
 Content-Type: application/json
 
 {
     "userIds": [
-      "00000508",
-      "00000845",
-      "00016933",
-      "00002220",
-      "00003585",
-      "00021686"
+      "00002051"
       ],
     "foJobs": [],
     "departments": [],
     "groups": [],
     "orgUnits": [],
     "hrPersonnelAreas": [],
-    "simulationMode": true,
+    "simulationMode": false,
     "emails": [],
     "referenceDate": "2025-01-01",
     "payComponent": {

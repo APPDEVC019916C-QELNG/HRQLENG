@@ -64,6 +64,7 @@ entity ExecutionLog : cuid,managed {
     eligible : Boolean;
     referenceDate : Date;
     amount : Decimal(15, 2);
+    numberOfUnits : Decimal(15, 2);
     toBeUpdated : Boolean;
     details : String; // New Pay Component / Amount Change / Deletion
     result : String; // Updated, Error, etc.

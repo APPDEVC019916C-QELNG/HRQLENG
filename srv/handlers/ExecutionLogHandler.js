@@ -21,11 +21,11 @@ class ExecutionLogHandler {
         });
     }
 
-    createExecutionLogSingleEntry = async (oEmployee, sReferenceDate, sExecutionID, bSimulationMode, aErrorMessages, bEligible, iAmount, bToUpdate, sDetails, sPayCompCode) => {
-        await this._createLogEntry(await this._buildPayload(oEmployee, sReferenceDate, sExecutionID, bSimulationMode, aErrorMessages, bEligible, iAmount, bToUpdate, sDetails, sPayCompCode));
+    createExecutionLogSingleEntry = async (oEmployee, sReferenceDate, sExecutionID, bSimulationMode, aErrorMessages, bEligible, iAmount,iCount, bToUpdate, sDetails, sPayCompCode) => {
+        await this._createLogEntry(await this._buildPayload(oEmployee, sReferenceDate, sExecutionID, bSimulationMode, aErrorMessages, bEligible, iAmount,iCount, bToUpdate, sDetails, sPayCompCode));
     }
 
-    _buildPayload = async (oEmployee, sReferenceDate, sExecutionID, bSimulationMode, aErrorMessages, bEligible, iAmount, bToUpdate, sDetails, sPayCompCode) => {
+    _buildPayload = async (oEmployee, sReferenceDate, sExecutionID, bSimulationMode, aErrorMessages, bEligible, iAmount,iCount, bToUpdate, sDetails, sPayCompCode) => {
         return {
             "executionID": sExecutionID,
             "simulationMode": bSimulationMode,
@@ -40,6 +40,7 @@ class ExecutionLogHandler {
             "eligible": bEligible,
             "referenceDate": sReferenceDate,
             "amount": iAmount,
+            "numberOfUnits": iCount,
             "toBeUpdated": bToUpdate,
             "details": sDetails,
             "result": bSimulationMode && bToUpdate ? (aErrorMessages && aErrorMessages.map(msg => msg.message).length > 0 ? "Error" : "Updated") : null,

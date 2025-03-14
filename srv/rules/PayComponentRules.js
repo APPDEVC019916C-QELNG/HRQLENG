@@ -13,24 +13,37 @@ class PayComponentRules {
     }
 
 
-    checkEmployeePayComponents = async (userId, sReferenceDate, payCompCode, simulationMode) => {
+    checkEmployeePayComponents = async (userId, sReferenceDate, payCompCode, simulationMode, isEligible) => {
         const aPayComponents = await this.getEmployeePayComponents(userId, sReferenceDate, payCompCode);
-        
+
+        let sMessage = "";
+    
+        // Check if employee is NOT eligible and has no pay components
+        if (!isEligible && (!aPayComponents || !aPayComponents.length)) {
+            return { bToUpdate: false, sDetails: constant.DETAILS.SCENARIO_7_1 };
+        }
+    
         if (aPayComponents && aPayComponents.length) {
             if (!simulationMode) {
                 // Execute upsert for each pay component in parallel
                 await Promise.all(aPayComponents.map(async (payComponent) => {
                     const sObject = this._buildRecurringPayComponentDelete(payComponent, userId, sReferenceDate);
-                    await this.httpClient.upsertEmpPayCompNonRecurring(sObject);
-                    console.log("deleted one component");
+                    const aResults = await this.httpClient.upsertEmpPayCompNonRecurring(sObject);
+
+                    if (aResults.d && aResults.d.length > 0) {
+                        sMessage = aResults.d.filter(res => res.httpCode != 200).map(res => res.message).join(" | ");
+                    } else {
+                        sMessage = constant.DETAILS.ERROR;
+                    }
+                    
                 }));
             }
-            //miguel log error
-            return { bToUpdate: true, sDetails: constant.DETAILS.SCENARIO_7_3 }; 
-        } 
+            return { bToUpdate: true, sDetails: constant.DETAILS.SCENARIO_7_3 , message: sMessage}; 
+        }
     
         return { bToUpdate: false, sDetails: constant.DETAILS.SCENARIO_7_2 };
     };
+    
 
     getEmployeePayComponents = (userId, sReferenceDate, payCompCode) => {
         return new Promise(async resolve => {
